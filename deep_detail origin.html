@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KUKINEWS Original Article</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1193d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101c22",
+            "foreground-light": "#111827",
+            "foreground-dark": "#f9fafb",
+            "subtle-light": "#6b7280",
+            "subtle-dark": "#9ca3af",
+            "border-light": "#e5e7eb",
+            "border-dark": "#374151"
+          },
+          fontFamily: {
+            "display": ["Newsreader", "serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Newsreader', serif;
+    }
+    .article-body-container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .prose-academic {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      text-align: justify;
+      hyphens: auto;
+    }
+    .prose-academic h2 {
+      text-align: left;
+      font-size: 1.875rem;
+      margin-top: 3rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 0.5rem;
+    }
+    .dark .prose-academic h2 {
+        border-bottom: 1px solid var(--border-dark);
+    }
+    .prose-academic h3 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .prose-academic p {
+      margin-bottom: 1.5rem;}
+    .prose-academic img {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        max-width: 80%;
+        margin-top: 2rem;
+        margin-bottom: 1rem;}
+    .prose-academic .figure-container {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    .prose-academic .caption {
+        text-align: center;
+        font-size: 0.95rem;
+        color: var(--subtle-light);
+        margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-foreground-light dark:text-foreground-dark">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-border-light dark:border-border-dark">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex h-16 items-center justify-between">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 text-foreground-light dark:text-foreground-dark" href="#">
+<svg class="h-8 w-8 text-primary" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+</svg>
+<span class="text-xl font-bold">KUKINEWS</span>
+</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium text-subtle-light dark:text-subtle-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-sm font-medium text-subtle-light dark:text-subtle-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">News</a>
+<a class="text-sm font-medium text-primary dark:text-primary font-semibold" href="#">Originals</a>
+<a class="text-sm font-medium text-subtle-light dark:text-subtle-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">Opinion</a>
+<a class="text-sm font-medium text-subtle-light dark:text-subtle-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">Community</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3">
+<svg class="h-5 w-5 text-subtle-light dark:text-subtle-dark" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</span>
+<input class="w-full rounded-full border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark pl-10 pr-4 py-2 text-sm focus:ring-primary focus:border-primary" placeholder="Search" type="search"/>
+</div>
+<button class="rounded-full p-2 hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+<svg class="h-6 w-6 text-subtle-light dark:text-subtle-dark" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<button class="size-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXB8Cx5BtuFQRHv6APgFf84muAFC1AG7Gb2IYqgmk-NCj90tNO4kvU4VjKaBpkZA8By-abcCM38LwluMbfPnl0KqrTyffRpmrJfuOoUB4cYPg9EWKHy1a-SVhP01XHTpYEG_ASZIdDhbUOE0GIv82aBCLMpnoUEyy9vH9YJQB9YWPkA5dH5UZ1oqfuaGOOn6NT3D8p98T3Ttuk-k3_CWzZUV7HG_s8aRObR7xo6WRfA6FDaZ2WdAap_OPdn2wOrk3_i3Kl3xRMj-s");'></button>
+</div>
+</div>
+</div>
+</header>
+<main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+<div class="grid md:grid-cols-2 gap-8 md:gap-12">
+<div class="md:sticky md:top-24 h-max">
+<div class="aspect-[3/4] w-full bg-cover bg-center rounded-xl shadow-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB_J3MDiLHOE_vp1krorWIwPtVcKnzM7feC4IqMEU0rTGy2prC0pUgifQjy-BzW4yg-WCi8Qk0Mkm8NcFoCMPOe72qxeyuBSAF24dNUgg_37PtAbrm4dtu3yO-IPNYVJoi__GVTSviMGP9VwTER6QRAmED-ImzlmPDcJXeOhXJ0eLNMj00FET9wsFWwpOhD2wPgcM8iJNbiGFZ8VZcJ3jLWYV8bQMMMlCcK4vWISjQhrdE6Mfau4N45FxvFDwiDaMVJs2OEYFBRSYI");'></div>
+</div>
+<div class="space-y-8 relative">
+<div>
+<div class="text-sm text-subtle-light dark:text-subtle-dark mb-4">
+<a class="hover:text-primary" href="#">Features</a>
+<span class="mx-2">/</span>
+<span>Originals</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold tracking-tight">The Future of Urban Farming: Vertical Farms and Sustainable Cities</h1>
+<p class="mt-4 text-lg text-subtle-light dark:text-subtle-dark">Explore how vertical farms are revolutionizing urban agriculture, enhancing food security, and promoting sustainability in densely populated areas.</p>
+<p class="mt-2 text-sm text-subtle-light dark:text-subtle-dark">By Sarah Lee | Published 2024-07-26</p>
+</div>
+<div class="bg-white dark:bg-background-dark border border-border-light dark:border-border-dark rounded-xl p-6 shadow-md space-y-4">
+<h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">dashboard</span>
+                            Executive Summary
+                        </h2>
+<div class="space-y-3">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+<div>
+<h3 class="font-semibold text-lg">Key Takeaways</h3>
+<ul class="list-disc list-inside text-sm text-subtle-light dark:text-subtle-dark space-y-1">
+<li>Vertical farming offers solutions for urban food security and sustainability.</li>
+<li>Year-round production and local supply reduce emissions and boost freshness.</li>
+<li>Advanced tech (sensors, automation) optimizes growth and efficiency.</li>
+<li>Challenges include high setup costs, energy use, and limited crop diversity.</li>
+<li>Despite hurdles, vertical farming is crucial for future urban food systems.</li>
+</ul>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">assessment</span>
+<h3 class="font-semibold text-lg mr-2">Difficulty Meter:</h3>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-400">star</span>
+<span class="material-symbols-outlined text-yellow-400">star</span>
+<span class="material-symbols-outlined text-yellow-400">star</span>
+<span class="material-symbols-outlined text-subtle-light dark:text-subtle-dark opacity-50">star</span>
+<span class="material-symbols-outlined text-subtle-light dark:text-subtle-dark opacity-50">star</span>
+<span class="text-sm text-subtle-light dark:text-subtle-dark">(3/5 stars)</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">verified</span>
+<h3 class="font-semibold text-lg mr-2">Fact-Check Confidence:</h3>
+<div class="flex items-center">
+<span class="text-green-500 font-bold text-xl">95%</span>
+<span class="text-sm text-subtle-light dark:text-subtle-dark ml-2">(High Reliability)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="article-body-container mt-8 md:mt-12">
+<article class="prose prose-lg dark:prose-invert max-w-none text-foreground-light dark:text-foreground-dark prose-academic">
+<div class="space-y-6">
+<h2 class="text-3xl font-bold mt-4">1. Introduction: The Dawn of Vertical Agriculture</h2>
+<p class="text-lg">1.1. Vertical farming is rapidly transforming urban agriculture, offering innovative solutions to enhance food security and sustainability in cities. These farms, often housed in skyscrapers or repurposed buildings, utilize controlled environments to optimize crop growth. By employing techniques like hydroponics and aeroponics, vertical farms minimize water usage and eliminate the need for soil, reducing the environmental impact of traditional agriculture. LED lighting systems further enhance efficiency by providing tailored light spectra for different crops, maximizing yields while minimizing energy consumption.</p>
+<div class="figure-container">
+<img alt="Introduction to Vertical Farming" class="w-full max-w-xl aspect-[16/9] object-cover rounded-lg shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr81U1tr3M78IWjJg2LZjN84zMdfCAnRRJ8V19ft4s53-f_ZsXC67KyIRRdLqDJF5D2N1ceWHHypVjAHHacScGRyQrXhwNOdtNzVYfxuAqmJagyWH-tYO1Q1-l5G8kRmpEyy34TcYeJBDakp4dpz78HoS1MFuOGL9gYLJwvE5PRvmpLstXCPnPs6BLGkpBjRzQ36uiLKSbBhljWulQvYxsovYCzaT4-NMium1-ZpdKSv9WvWaW9oc7H0lD87k1gK0_tlciT80WC3I"/>
+<div class="caption">Figure 1: Illustration of a modern vertical farm facility.</div>
+</div>
+<h2 class="text-3xl font-bold mt-4">2. Advantages of Vertical Farming: Cultivating Consistency</h2>
+<p class="text-lg">2.1. One of the key benefits of vertical farming is its ability to produce food year-round, regardless of external weather conditions. This consistent production helps stabilize food supply chains and reduces reliance on long-distance transportation, lowering carbon emissions. Moreover, vertical farms can be located within city limits, bringing fresh produce closer to consumers and reducing food miles. This proximity not only ensures fresher and more nutritious food but also creates local jobs and fosters community engagement in food production.</p>
+<div class="figure-container">
+<img alt="Benefits of Vertical Farming" class="w-full max-w-xl aspect-[16/9] object-cover rounded-lg shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFTRhDfyMiL_QRJ6Nv8POFb2-Q02No57Ew7Ugiof-gFWZLCLlmbdetMf-0WU63humee8yn5AIHYEaYgGMmPrQpBeBK92Ik4UE7uWoc6ZdSVoBdlJ4mHmBMksl38NMNjPeWrj-COtXyoEHZ3diVnJpy0j_-cvROjgldz_0tXwAouZI2aS13ZFGiBwzu10aNgRoyY2GquQF6HsPKgGMNJ5BaokRIDroqjsOMHAaEByKfkAEYVH6CK85DRUPizXNr9D2XsCFCZ3s8MXo"/>
+<div class="caption">Figure 2: Diagram showcasing efficient space utilization in vertical farming.</div>
+</div>
+<h2 class="text-3xl font-bold mt-4">3. Technological Innovations: The Tech Behind the Harvest</h2>
+<p class="text-lg">3.1. The integration of technology plays a crucial role in the success of vertical farms. Sensors and data analytics monitor and adjust environmental conditions in real-time, ensuring optimal growth parameters. Automation, including robotic systems for planting, harvesting, and packaging, further increases efficiency and reduces labor costs. These technological advancements make vertical farming a viable and scalable solution for urban food production.</p>
+<div class="figure-container">
+<img alt="Technology in Vertical Farms" class="w-full max-w-xl aspect-[16/9] object-cover rounded-lg shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1fEzQKdGZ6KMLk_qw1fI8VoCi361mwWkliO-EHIRfOEsQHz9mnRqUpt_1JLz64pdQ-xU1YGNx6LIvJBsUGlBEQ1Q5JalN7QjJZGqQv4cPhkCgkcYgw_ugMZBExjomQ_ToUyDLprZtGoG13q-mvnHorPHxBIywr3YVDOoTTjBXk3WulMGF1EThjBmzjfh9sBreEVT6TG8LanW0zBPrmVmLfAXTSFQbwudCbQkYgWy2cv5M06_ogjG0CpwVcnaaW-GxAwWeOtmUJWE"/>
+<div class="caption">Figure 3: Advanced technological infrastructure for indoor farming.</div>
+</div>
+<h2 class="text-3xl font-bold mt-4">4. Challenges and Limitations: Overcoming Obstacles</h2>
+<p class="text-lg">4.1. However, vertical farming also faces challenges. The high initial investment costs for infrastructure and technology can be a barrier to entry. Energy consumption, particularly for lighting and climate control, remains a significant operational expense, although the use of renewable energy sources can mitigate this impact. Additionally, the range of crops suitable for vertical farming is currently limited, with a focus on leafy greens, herbs, and some fruits. Ongoing research and development are expanding the possibilities, but further innovation is needed to diversify the types of produce that can be grown efficiently.</p>
+<div class="figure-container">
+<img alt="Challenges of Vertical Farming" class="w-full max-w-xl aspect-[16/9] object-cover rounded-lg shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaIkaQWb1UDNo1aSdsUZro2-VJAKVSIbPe-C_SPrVOXI2rhSljEjCF4EG1oNX4ULnKuwcWzIjft-h93gd37m735qUhyMS88uHNhuogPMI6TDnIscZ8erL5mFKN-76UbU2wUoQD7hdKFwdbQA5YisnmVMyM8sZKksOQI40z4ubctizHMnNbkC0MzjNvxaMu8Z_vWQ-5n08vBfX4Jh2zbIT07aT3YCPmDy5XpMF0hfexw2NZXAkdCPOx4NqHgLmNgOj3nsHHxN6es64"/>
+<div class="caption">Figure 4: Conceptual image illustrating a challenge faced by vertical farms.</div>
+</div>
+<h2 class="text-3xl font-bold mt-4">5. Conclusion: Sowing Seeds for a Sustainable Urban Future</h2>
+<p class="text-lg">5.1. Despite these challenges, the potential of vertical farming to revolutionize urban food systems is undeniable. As cities continue to grow and face increasing pressure on resources, vertical farms offer a sustainable and resilient approach to food production. By combining technological innovation with a commitment to environmental responsibility, vertical farming can play a vital role in creating healthier, more sustainable urban environments.</p>
+<div class="figure-container">
+<img alt="Future Outlook" class="w-full max-w-xl aspect-[16/9] object-cover rounded-lg shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuzeJb8mbuVHnGZOTw3y6bkkDECey1Xm6vT5CNg4jiRuzLgE4oQg1x33VWQliRdrCVEbx1zmgnW4u3jgK0yZgPlQlIEtPK0k-DNxpfibdEKJ-MT8GZ9UfAVPHU3YJRrb0dU7Q3snRIHmnJcj7Fz7HRnSQ5QapE-eV6cVmxrQBt9Vwv3qrojd9lTA2vqy5XJX5s6wIuvD11Bo5aO9QTV38LRZj4LD_P6IwP2Gz5bSstWKMWXD_AhyFgp8UWVWAghpSzv79DnBp8cG8"/>
+<div class="caption">Figure 5: Artistic representation of a future sustainable urban landscape.</div>
+</div>
+</div></article>
+<div class="flex items-center gap-4 pt-6 border-t border-border-light dark:border-border-dark mt-16">
+<button class="flex items-center gap-2 rounded-full px-4 py-2 bg-primary/10 dark:bg-primary/20 text-primary hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path></svg>
+<span class="text-sm font-medium">Share</span>
+</button>
+<button class="flex items-center gap-2 rounded-full px-4 py-2 bg-primary/10 dark:bg-primary/20 text-primary hover:bg-primary/20 dark:hover:bg-primary/30 transition-colors">
+<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-3.125L5 18V4z"></path></svg>
+<span class="text-sm font-medium">Save</span>
+</button>
+</div>
+</div>
+<div class="mt-16 pt-12 border-t border-border-light dark:border-border-dark article-body-container">
+<h2 class="text-2xl font-bold mb-6">Appendix A: Glossary of Key Terms</h2>
+<div class="space-y-6 text-base">
+<div class="border-b border-border-light dark:border-border-dark pb-4">
+<h3 class="text-xl font-semibold mb-2">Urban Farming</h3>
+<p class="text-subtle-light dark:text-subtle-dark">The practice of cultivating, processing, and distributing food in or around urban areas. It encompasses various methods, including community gardens, rooftop gardens, and advanced techniques like vertical farming. Its primary aims are to enhance local food security, reduce food miles, and contribute to urban sustainability.</p>
+</div>
+<div class="border-b border-border-light dark:border-border-dark pb-4">
+<h3 class="text-xl font-semibold mb-2">Hydroponics</h3>
+<p class="text-subtle-light dark:text-subtle-dark">A method of growing plants without soil, utilizing mineral nutrient solutions dissolved in water. Plants are typically supported by an inert medium such as perlite, rockwool, or coconut coir. This technique allows for precise control over nutrient delivery and can significantly reduce water consumption compared to conventional agricultural practices.</p>
+</div>
+<div class="border-b border-border-light dark:border-border-dark pb-4">
+<h3 class="text-xl font-semibold mb-2">Aeroponics</h3>
+<p class="text-subtle-light dark:text-subtle-dark">A cultivation technique where plants are grown in an air or mist environment without the use of soil or an aggregate medium. Plant roots are suspended in the air and are periodically misted with a nutrient-rich water solution. This method provides excellent aeration for roots, promoting rapid growth and nutrient absorption, and uses even less water than hydroponics.</p>
+</div>
+<div class="pb-4">
+<h3 class="text-xl font-semibold mb-2">LED Lighting</h3>
+<p class="text-subtle-light dark:text-subtle-dark">Light Emitting Diode lighting used in controlled environment agriculture, such as vertical farms, to stimulate plant growth. Unlike traditional grow lights, LEDs can be tailored to emit specific light spectra (colors) that are most beneficial for photosynthesis at various growth stages. This precision optimizes energy use and maximizes crop yields.</p>
+</div>
+</div>
+</div>
+<div class="mt-16 pt-12 border-t border-border-light dark:border-border-dark">
+<h2 class="text-2xl font-bold mb-6">Related Articles</h2>
+<div class="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+<div class="group">
+<div class="aspect-video w-full bg-cover bg-center rounded-lg mb-4 overflow-hidden" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCZSjGQ1H59uDUfQs3ThplYGZOHCn2GFRT97GHjetB_sVuT3Ne17YGje1DMZHxL6izERQo1p69aJDZZWfDkvA82yyuQU9trtQ0U6FuDa7ql23SEAnU7Nf8EEQm8YB35_W19kOJo0kDEcQZI7M8dDjyxpXkVXISzK71Y1PJy-l-BJ9wTp5pQsyJNmT7WrzthPZYrUo9yXjEt_DJV1Q2LLBjtaBB1C2PIn7hAp9EFuOLNalFJZhwMrIzRES4pngStYY0m_r66dy6Sj6Y");'></div>
+<h3 class="font-bold group-hover:text-primary transition-colors">Sustainable Agriculture Practices</h3>
+<p class="text-sm text-subtle-light dark:text-subtle-dark">Explore eco-friendly farming methods.</p>
+</div>
+<div class="group">
+<div class="aspect-video w-full bg-cover bg-center rounded-lg mb-4 overflow-hidden" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCrAsmq-2pdqXvIvuZSzSA1dHuaVoeXAa7hctsLRR0k-XYybLqluzbRAL8eamItYsR7eY6nVp4RLfNauHMp9jUbadpuM7Da7PBgUJPaWaBnzXhmQ9o2WYx0Ld3lvEPlGIdJatyd4LJzwCv8h8NBCGjZor8o3ZoANDiOUtd-aa3sXVv7RlAqwh4YNgIYgw_e4R3QV73B4Vhvh3k60edKnaaonu_HGXK1YopRHDmcyuJ21cS-tz2Hqn7h2yBIWjl2ezZiF5-9TMsHDuk");'></div>
+<h3 class="font-bold group-hover:text-primary transition-colors">Urban Gardening Trends</h3>
+<p class="text-sm text-subtle-light dark:text-subtle-dark">Tips for growing food in urban spaces.</p>
+</div>
+<div class="group">
+<div class="aspect-video w-full bg-cover bg-center rounded-lg mb-4 overflow-hidden" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSXjrm9bCLKQ_YlKCLohMyf03p2Y3yIohlTtDcZTftagFuZ21TS2K3r7DDmVNGqL-Q1WpaMQqEYTHE5TJjBdaLQHR7Pq3stsxr7DPdWVXlF1oQHeve7wEjpN3ZMS0RLTjBoQjA5ismjnwST9ZOc6MmdLwz_yHZuQD6susbq8dwVKLWAQxYMSXIySv4jKsb_pXhRLQCvokPhlKRcVerpvaW-ItaqsN6rPO9H2YZHnIVUpUEsEc8ceFRTJUyeVokmUzoEmIBdv-DTw0");'></div>
+<h3 class="font-bold group-hover:text-primary transition-colors">Enhancing Food Security in Cities</h3>
+<p class="text-sm text-subtle-light dark:text-subtle-dark">Strategies for ensuring food availability.</p>
+</div>
+</div>
+</div>
+<div class="mt-16 pt-12 border-t border-border-light dark:border-border-dark article-body-container">
+<h2 class="text-2xl font-bold mb-6">Comments (3)</h2>
+<div class="space-y-8">
+<div class="flex items-start gap-4">
+<div class="size-10 rounded-full bg-cover bg-center flex-shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA6y4y-QfODioFckgUHvGHl8cNSVbf8C1NYG9NNrsybgU7jA-bhVPOh7wFdwlsqWXUf_b6kMY2UxShHo02PfsIsR1FrdmsNNieswyBsYwHB9rgGTlB0v6rH6TCfZY4YFZQCmQUoXv-uL2vgLP2xcUFHHU8fKM_MPdKDnH5P3ouBF6bgAR1p6vX3xb6a21Vdd3u9M22ax8eATCCjWQXIYOPq_SRvDebV_mLT7VzBEYGe9f48qbrasXN3lLGixFbLap96dZUf1vfaLGE");'></div>
+<div class="flex-grow">
+<textarea class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-sm" placeholder="Add a comment..." rows="3"></textarea>
+<div class="mt-2 flex justify-end">
+<button class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors">Post Comment</button>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="size-10 rounded-full bg-cover bg-center flex-shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQ62e37LX4zzE6W5UNIzc0nEgy4VkMIX83NzyO2RcFR7XpdCPhLqkxHXudtHvqcNOlgGxMPRddFbfExeHx6D7nobCjEhAFYwgbMmoOMiBxVN5MCBewV2Lv7wdraCU2jBFjcuPDEc61FOs9MHbLXx9TDdvI0Cotihc1eLpNL2sniYSmamdSieDN4tmSszhVJkT-AReX0n-T3jYDoHD_CNDFEJYCfXYQNTgSj4EpTIRMEIoBRHFE_WzHwuMfBDlKKoS5nCTKqnu6BWs");'></div>
+<div class="flex-grow">
+<div class="flex items-center gap-2 text-sm">
+<span class="font-bold">Emily Carter</span>
+<span class="text-subtle-light dark:text-subtle-dark">2024-07-27</span>
+</div>
+<p class="mt-1 text-sm">This article provides a comprehensive overview of vertical farming. The potential benefits for urban sustainability are truly exciting!</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="size-10 rounded-full bg-cover bg-center flex-shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBRzLEHwOQEsUDWmkkp0gz1vyHVhhZCwGV62b0x71MDYp3xSEEP1IFbfhRe3TQ67RrN5vmsI3C10RH8hkfhAhhoTOwMhOrqnjdD5DNZ1D9lcRZTJ4pdBzFJLDVrEKN_Ng3-O7J3LkIZkxrhFMZF0zvfoUp70QW7JlwJqtAnC3hvLd7XyTc5U37yZfD0ekoiKPnsVeUzU-DIZYcGbu9dG_GPNYC2sDU263c7pdHBjnW4_OSJCamO1WbbxZjRPvmiv90-z445nKbNqvg");'></div>
+<div class="flex-grow">
+<div class="flex items-center gap-2 text-sm">
+<span class="font-bold">David Chen</span>
+<span class="text-subtle-light dark:text-subtle-dark">2024-07-27</span>
+</div>
+<p class="mt-1 text-sm">I'm curious about the economic feasibility of vertical farms. Are they currently cost-competitive with traditional agriculture?</p>
+</div>
+</div>
+<div class="flex items-start gap-4 pl-14">
+<div class="size-10 rounded-full bg-cover bg-center flex-shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuArJb4gfIBQzknQKvbs6_qX-GhP_QddkNrxoO3LGZ4_STJKXIFMqXWXYFKi3ZjobPlcnQAAmMoSzUo9IhXWgyPVqp5nELIIYThGSxZw5Cb6nwJG-W60Jk0QbWd2csgZ8ZdSGfa4Q3HS0RNpLj7RZ2HoE97Xt-SntIgK6kDsIqM2IpW_wJz53ud3806iQtibMOsNk5SxtFHUu9-gg0ALJYU5LizWTdAsqZoMUmksm7LpmOKSsDjIPAIE8gQ25aJZP1DXkJk4TI3a050");'></div>
+<div class="flex-grow">
+<div class="flex items-center gap-2 text-sm">
+<span class="font-bold text-primary">Sarah Lee (Author)</span>
+<span class="text-subtle-light dark:text-subtle-dark">2024-07-27</span>
+</div>
+<p class="mt-1 text-sm">David, the initial investment can be high, but as technology advances and efficiency improves, vertical farms are becoming more economically viable, especially in areas with limited arable land.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    // Removed JavaScript for the old knowledge map popup
+</script>
+
+</body></html>

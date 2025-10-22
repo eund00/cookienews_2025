@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>뉴스 포털 개편 디자인 시안 (최종 복구)</title>
+    <!-- Tailwind CSS CDN 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 쿠키뉴스 공식 브랜드 컬러 설정 -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "kuki-orange": "#FF9100", // KN Buscuit Orange (주요 강조색)
+              "kuki-brown": "#634B28", // KN Chocolate Brown (주요 배경/글자색)
+              "kuki-beige": "#F7EDDD", // KN Cream Beige (보조색)
+              "kuki-light-text": "#f0f4f8", // 배경색과 구별되는 밝은 텍스트
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Inter 폰트 사용 */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8; /* Gray-100, 밝은 배경 */
+      }
+      /* 기사 카드 이미지 플레이스홀더 스타일 */
+      .article-placeholder {
+        height: 150px;
+        background-color: #f7eddd; /* KN Cream Beige */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #634b28; /* KN Chocolate Brown */
+        text-align: center;
+      }
+      /* 메인 미디어 영역: 가로 이미지에 최적화된 비율 (Aspect Ratio 16:9) */
+      /* main-media-area의 height:0, padding-top:56.25% 대신 flex를 사용하여 높이를 부모와 맞춥니다 */
+      .main-media-area {
+        position: relative;
+        width: 100%;
+        height: 100%; /* 부모 요소의 높이를 꽉 채우도록 설정 */
+        overflow: hidden;
+        background-color: #634b28;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* 캐러셀 내부의 아이템 높이도 꽉 차도록 설정 */
+      #main-media-carousel {
+        height: 100%;
+        width: 100%;
+      }
+
+      /* 스크롤바 숨기기 (카테고리 네비게이션용) */
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+
+      /* 신문철/레이어 탭 스타일링 */
+      .tab-style {
+        padding: 0.5rem 1.5rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        min-width: 120px;
+        position: relative;
+        transform-origin: bottom left; /* 변형 기준점 설정 */
+        border: 1px solid transparent;
+        margin-right: -1px; /* 탭 간의 겹침 효과를 위해 마진 제거 */
+        z-index: 1;
+      }
+
+      /* 공통 비활성 탭 스타일 */
+      .tab-inactive {
+        /* 비활성 탭에 기울기 및 그림자 적용 */
+        transform: skewY(-2deg); /* 약간 기울어짐 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 0;
+        /* 탭 색상은 아래에서 개별 지정 */
+      }
+      .tab-inactive:hover {
+        transform: skewY(-2deg) translateY(-2px);
+        opacity: 0.9;
+      }
+
+      /* 활성 탭 (메인 뉴스) 스타일 - Orange */
+      .tab-active-main {
+        background-color: "#FF9100"; /* KN Orange 적용 */
+        color: white; /* 흰색 글자 */
+        transform: skewY(0deg); /* 기울기 없음 */
+        border: 1px solid #ff9100;
+        border-bottom: 1px solid transparent; /* 아래 선 제거하여 메인 헤더와 연결 */
+        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+      }
+
+      /* 비활성 탭 (SNS 피드) 스타일 - Beige */
+      .tab-inactive-sns {
+        background-color: #f7eddd; /* KN Beige */
+        color: #634b28; /* KN Brown 글자 */
+      }
+
+      /* 비활성 탭 (브랜딩) 스타일 - Brown */
+      .tab-inactive-branding {
+        background-color: #634b28; /* KN Brown */
+        color: #f7eddd; /* KN Beige 글자 */
+      }
+
+      /* 모바일 최적화를 위해 작은 화면에서는 탭 기울기 제거 */
+      @media (max-width: 640px) {
+        .tab-style {
+          transform: none !important;
+          margin-right: 0;
+          border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .tab-inactive {
+          box-shadow: none;
+        }
+        .tab-active-main {
+          border-bottom: none;
+        }
+      }
+
+      /* 하위 섹션 메뉴 스타일 */
+      .sub-category-menu {
+        border-top: 2px solid #634b28; /* KN Chocolate Brown 상단선 */
+        border-bottom: 2px solid #634b28; /* KN Chocolate Brown 하단선 */
+        padding: 10px 0;
+        margin-top: 0;
+        overflow-x: auto; /* 모바일에서 스크롤 가능하게 */
+        white-space: nowrap; /* 항목들을 한 줄에 유지 */
+      }
+      .sub-category-list {
+        display: flex; /* flex로 변경하여 간격 조정 용이하게 */
+        align-items: center;
+        justify-content: space-between; /* 항목 간 균등 간격 배치 */
+        width: 100%;
+      }
+      .sub-category-item {
+        /* 4개 항목이 25%씩 너비를 가지도록 flex-grow/shrink 조정 */
+        flex-grow: 1;
+        flex-shrink: 1;
+        text-align: center; /* 텍스트 중앙 정렬 */
+        position: relative;
+      }
+      .sub-category-item-link {
+        font-size: 0.9rem;
+        color: #634b28; /* KN Brown 글자색 */
+        font-weight: 500;
+        display: block;
+        padding: 0 1rem;
+        white-space: nowrap;
+      }
+      .sub-category-item-link:hover {
+        color: #ff9100;
+      }
+
+      /* 슬라이드 아이템의 초기 상태 숨김 */
+      .carousel-item {
+        position: absolute;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        height: 100%; /* 부모의 높이를 채우도록 설정 */
+        width: 100%; /* 부모의 너비를 채우도록 설정 */
+      }
+      .carousel-item.active {
+        opacity: 1;
+        z-index: 10;
+      }
+
+      /* NYT 스타일: 메인 기사 영역 분할 조정 */
+      @media (min-width: 1024px) {
+        /* lg: */
+        .nyt-grid {
+          /* 텍스트 3/12, 미디어 6/12, 서브 3/12 로 3분할 */
+          grid-template-columns: 3fr 6fr 3fr;
+          align-items: stretch; /* 모든 열의 높이를 동일하게 */
+        }
+      }
+
+      /* 미디어 영역 조정 (모바일/태블릿) */
+      @media (max-width: 1023px) {
+        /* md: */
+        .nyt-grid {
+          grid-template-columns: 1fr; /* 모바일에서는 세로로 쌓기 */
+        }
+        .main-media-area {
+          padding-top: 60%; /* 모바일에서 좀 더 세로로 길게 */
+          height: auto; /* 모바일에서는 높이 자동 조정 */
+        }
+      }
+
+      /* 최신 주요 기사 섹션 커스텀 스타일 */
+      .main-article-item {
+        display: flex;
+        gap: 1.5rem; /* 이미지와 텍스트 사이 간격 */
+        padding-bottom: 1.5rem;
+      }
+      .main-article-item:not(:last-child) {
+        border-bottom: 1px solid #f7eddd;
+        margin-bottom: 1.5rem;
+      }
+
+      /* 높이 정렬을 위한 Flexbox 스타일 */
+      .flex-equal-height > div {
+        display: flex;
+        flex-direction: column;
+      }
+      .flex-equal-height .content-box {
+        /* 내부 콘텐츠 박스가 높이를 꽉 채우도록 설정 */
+        flex-grow: 1;
+        background-color: white; /* 배경색 통일 */
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      }
+
+      /* 광고 플레이스홀더 스타일 */
+      .ad-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.75rem; /* text-xs */
+        font-weight: 700; /* font-bold */
+        color: #634b28; /* KN-Brown */
+        background-color: #f7eddd; /* KN-Beige */
+        border: 2px dashed #ff9100; /* KN-Orange 테두리 */
+        border-radius: 0.5rem; /* rounded-lg */
+        margin-bottom: 1rem;
+        flex-grow: 1; /* 높이를 균등하게 나누도록 설정 */
+      }
+
+      /* TOP 10 스타일 */
+      .top-10-grid {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 1rem;
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+      .top-10-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .top-10-item {
+        display: inline-block;
+        width: 200px; /* 고정 너비 설정 */
+        margin-right: 1rem;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease-out;
+      }
+      .top-10-item:hover {
+        transform: translateY(-4px);
+      }
+      .top-10-image {
+        width: 100%;
+        height: 250px; /* 직사각형 썸네일 */
+        object-fit: cover;
+        background-color: #634b28; /* KN Brown 배경 */
+        border-radius: 0.5rem;
+        position: relative;
+      }
+      .top-10-rank {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 8rem; /* 큰 순위 숫자 */
+        line-height: 1;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.15); /* 반투명 흰색 */
+        -webkit-text-stroke: 1px #ff9100; /* KN Orange 테두리 */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        transform: translate(-10%, -10%);
+        z-index: 20;
+      }
+      .top-10-title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.75rem;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.3;
+        border-radius: 0 0 0.5rem 0.5rem;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+      }
+      .top-10-item .rank-number {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: #ff9100;
+        z-index: 30;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 0 0.5rem;
+        border-radius: 0.3rem;
+      }
+
+      /* 멀티미디어 섹션 스타일 */
+      .media-section-bg {
+        background-color: #634b28; /* KN Brown 배경 */
+        color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        position: relative; /* 제목 절대 위치를 위한 기준 */
+      }
+      /* 우측 4개 썸네일 컨테이너 */
+      .right-media-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2열 그리드 */
+        gap: 1rem;
+      }
+      .right-media-item .thumb {
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 비율 유지 */
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 0.5rem; /* 제목과의 간격 */
+      }
+      .media-thumb-placeholder {
+        position: absolute;
+        inset: 0;
+        background-color: #f7eddd; /* KN Beige */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: #634b28;
+        font-weight: 700;
+        border-radius: 0.5rem;
+        border: 2px solid #ff9100; /* KN Orange 테두리 */
+      }
+      /* 섹션 제목 (멀티미디어) 스타일 */
+      .section-title-multimedia {
+        /* 제목이 좌측 썸네일 영역 상단에 독립적으로 배치됨 */
+        color: #ff9100;
+        font-size: 2rem;
+        font-weight: 800;
+        border-bottom: 2px solid #ff9100;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      /* 좌측 메인 썸네일 내부 제목 스타일 */
+      .main-media-title-inner {
+        z-index: 20;
+        color: white;
+        position: absolute;
+        bottom: 0;
+        padding: 1.5rem;
+        background-color: rgba(0, 0, 0, 0.4);
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 0 0 0.5rem 0.5rem;
+      }
+      /* 전국 기사 섹션 스타일 */
+      .region-news-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .region-news-thumb {
+        flex-shrink: 0;
+        width: 100px;
+        height: 70px; /* 100x70 썸네일 비율 */
+        background-color: #f7eddd;
+        border-radius: 0.3rem;
+        background-size: cover;
+      }
+      /* SEO 카테고리 나열 스타일 */
+      .seo-category-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      }
+      @media (min-width: 768px) {
+        .seo-category-grid {
+          grid-template-columns: repeat(6, 1fr); /* 데스크톱에서 6열 */
+        }
+      }
+
+      .seo-category-col h4 {
+        font-weight: bold;
+        color: #634b28;
+        border-bottom: 2px solid #ff9100;
+        padding-bottom: 0.25rem;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+      }
+      .seo-category-col ul li a {
+        font-size: 0.85rem;
+        color: #634b28;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+      }
+      .seo-category-col ul li a:hover {
+        opacity: 1;
+        color: #ff9100;
+      }
+      /* 푸터 SEO 카테고리 스타일 (새로운 형태) */
+      .footer-seo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      }
+      @media (min-width: 768px) {
+        .footer-seo-grid {
+          grid-template-columns: repeat(8, 1fr); /* 데스크톱에서 8열 */
+        }
+      }
+      .footer-seo-col h5 {
+        font-weight: bold;
+        color: #634b28;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      .footer-seo-col ul li a {
+        font-size: 0.75rem;
+        color: #634b28;
+        opacity: 0.7;
+      }
+      .seo-category-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .red-box {
+        background-color: red;
+      }
+      .red-box > a {
+        height: calc(100% / 2);
+      }
+      .red-box > a .text-xs {
+        width: 400px;
+        height: 100%;
+      }
+      .row-direction {
+        display: flex !important;
+        flex-direction: row-reverse !important;
+      }
+    </style>
+  </head>
+  <body class="text-kuki-brown">
+    <!-- 1. 헤더/내비게이션 (뉴스 포털 스타일) -->
+    <header class="top-0 z-50">
+      <!-- 상단 신문철/레이어 탭 영역 -->
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 bg-transparent flex space-x-0"
+      >
+        <!-- 메인 뉴스 (활성 탭 - Orange) -->
+        <div
+          class="tab-style tab-active-main bg-kuki-orange text-white"
+          style="background-color: #ff9100; color: white"
+        >
+          메인 뉴스
+        </div>
+        <!-- SNS 피드 (비활성 탭 - Beige) -->
+        <div class="tab-style tab-inactive tab-inactive-sns">
+          <a href="feed_sns.html">SNS 피드</a>
+        </div>
+        <!-- 브랜딩 (비활성 탭 - Brown) -->
+        <div class="tab-style tab-inactive tab-inactive-branding">
+          <a href="branding.html">브랜딩</a>
+        </div>
+      </div>
+
+      <!-- 메인 헤더 영역 (탭 아래) -->
+      <div
+        class="bg-kuki-orange shadow-lg border-t border-kuki-orange -mt-px relative z-5"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white pt-1">
+          <!-- 로고, 광고, 회원가입/검색 영역 -->
+          <div class="flex justify-between items-center py-4">
+            <!-- 로고 -->
+            <a
+              href="/"
+              class="text-3xl font-extrabold text-kuki-orange tracking-tight"
+            >
+              쿠키뉴스
+            </a>
+
+            <!-- 광고 및 버튼 그룹 -->
+            <div class="flex items-center space-x-4">
+              <!-- 배너 광고 Placeholder (데스크톱에서 로고 오른쪽, 버튼 왼쪽으로 이동) -->
+              <div
+                class="hidden md:flex bg-kuki-beige h-10 w-64 flex-shrink-0 items-center justify-center text-xs rounded-lg border border-dashed border-kuki-brown/50"
+              >
+                [상단 배너 광고 468x60]
+              </div>
+
+              <!-- 로그인/회원가입 그룹 -->
+              <div class="flex items-center space-x-2 text-sm">
+                <!-- 로그인 링크 -->
+                <a
+                  href="log-in.html"
+                  class="text-kuki-brown hover:text-kuki-orange transition duration-150 font-semibold"
+                >
+                  로그인
+                </a>
+
+                <!-- 구분선 -->
+                <span class="text-gray-400 font-light">|</span>
+
+                <!-- 회원가입 버튼 (버튼 형태 유지) -->
+                <a
+                  href="log-in.html"
+                  class="bg-kuki-orange text-white font-semibold px-3 py-1.5 rounded-lg hover:bg-opacity-90 transition duration-150"
+                >
+                  회원가입
+                </a>
+              </div>
+
+              <!-- 검색 버튼 (돋보기) -->
+              <button
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150 flex-shrink-0"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 0 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 메인 카테고리 네비게이션 및 날짜/날씨 정보 -->
+          <div
+            class="flex justify-between items-center border-b border-kuki-brown"
+          >
+            <nav
+              class="flex overflow-x-auto whitespace-nowrap py-3 space-x-6 md:space-x-8 text-sm md:text-base scrollbar-hide"
+            >
+              <a
+                href="#"
+                class="text-kuki-orange font-bold border-b-2 border-kuki-orange pb-1"
+                >정치</a
+              >
+              <a
+                href="#"
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150"
+                >경제</a
+              >
+              <a
+                href="#"
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150"
+                >산업</a
+              >
+              <a
+                href="#"
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150"
+                >사회</a
+              >
+              <a
+                href="#"
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150"
+                >생활건강</a
+              >
+              <a
+                href="#"
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150"
+                >스포츠·연예</a
+              >
+              <a
+                href="#"
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150"
+                >포토</a
+              >
+              <a
+                href="#"
+                class="text-kuki-brown hover:text-kuki-orange transition duration-150"
+                >전국</a
+              >
+            </nav>
+
+            <!-- 날짜 및 날씨 정보 (카테고리 라인에 맞춰 오른쪽 끝에 배치) -->
+            <div
+              id="date-weather"
+              class="text-sm text-kuki-brown pb-0.5 hidden sm:flex items-center flex-shrink-0"
+            >
+              <span id="current-date" class="text-kuki-brown text-sm"></span>
+              <span
+                id="weather-icon"
+                class="text-kuki-brown text-lg ml-1 pt-0.5"
+                role="img"
+                aria-label="날씨 이모티콘"
+              ></span>
+            </div>
+          </div>
+
+          <!-- 하위 섹션 메뉴 -->
+          <div class="sub-category-menu border-t-0">
+            <div class="sub-category-list">
+              <!-- 쿠키 오리지널 -->
+              <div class="sub-category-item">
+                <a
+                  href="./deep_main.html"
+                  class="sub-category-item-link hover:text-kuki-orange transition duration-150"
+                >
+                  쿠키 오리지널
+                </a>
+              </div>
+
+              <!-- 오피니언 -->
+              <div class="sub-category-item">
+                <a
+                  href="#"
+                  class="sub-category-item-link hover:text-kuki-orange transition duration-150"
+                >
+                  오피니언
+                </a>
+              </div>
+
+              <!-- 섹션 지면 보기 -->
+              <div class="sub-category-item">
+                <a
+                  href="#"
+                  class="sub-category-item-link hover:text-kuki-orange transition duration-150"
+                >
+                  섹션 지면 보기
+                </a>
+              </div>
+
+              <!-- 쿠키 여론조사 -->
+              <div class="sub-category-item">
+                <a
+                  href="#"
+                  class="sub-category-item-link hover:text-kuki-orange transition duration-150"
+                >
+                  쿠키 여론조사
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- 1. 브레이킹 뉴스/탑 스토리 섹션 (NYT 스타일 3분할) -->
+      <section
+        id="top-story-section"
+        class="mb-12 bg-white rounded-xl shadow-lg p-6"
+      >
+        <!-- grid-cols-1 lg:grid-cols-12 gap-6 nyt-grid 에 align-items: stretch 속성 반영 -->
+        <div
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 nyt-grid items-stretch"
+        >
+          <!-- 1. 주요 서브 뉴스 목록 (좌측 3/12) -->
+          <div
+            class="lg:col-span-3 space-y-4 flex flex-col justify-start pt-4 lg:pt-0 order-2 lg:order-1 h-full"
+          >
+            <h3
+              class="text-xl font-bold text-kuki-brown pb-2 mb-2 border-b border-kuki-beige flex-shrink-0"
+            >
+              주요 서브 뉴스
+            </h3>
+
+            <!-- 서브 기사 1 (순서 변경: 이미지 -> 텍스트, 카테고리/시간 제거) -->
+            <a
+              href="newpaper.html"
+              class="flex space-x-4 group cursor-pointer pb-4 border-b border-kuki-beige hover:bg-kuki-beige/50 p-2 -m-2 rounded-lg transition duration-150"
+            >
+              <!-- 썸네일 영역 (왼쪽) -->
+              <div
+                class="flex-shrink-0 article-placeholder w-20 h-20 rounded-lg text-xs"
+                style="
+                  background-image: url(https://placehold.co/80x80/F7EDDD/634B28?text=Image);
+                  background-size: cover;
+                "
+              ></div>
+              <!-- 텍스트 영역 (오른쪽) -->
+              <div class="flex-grow">
+                <!-- 카테고리 제거 -->
+                <h4
+                  class="text-sm font-bold hover:text-kuki-brown line-clamp-3 mt-1"
+                >
+                  [사회] 서울 아파트 전세가 다시 상승세, 그 이유는?
+                </h4>
+                <!-- 시간 정보 제거 -->
+              </div>
+            </a>
+
+            <!-- 서브 기사 2 (순서 변경: 이미지 -> 텍스트, 카테고리/시간 제거) -->
+            <a
+              href="newpaper.html"
+              class="flex space-x-4 group cursor-pointer pb-4 border-b border-kuki-beige hover:bg-kuki-beige/50 p-2 -m-2 rounded-lg transition duration-150"
+            >
+              <!-- 썸네일 영역 (왼쪽) -->
+              <div
+                class="flex-shrink-0 article-placeholder w-20 h-20 rounded-lg text-xs"
+                style="
+                  background-image: url(https://placehold.co/80x80/F7EDDD/634B28?text=Image);
+                  background-size: cover;
+                "
+              ></div>
+              <!-- 텍스트 영역 (오른쪽) -->
+              <div class="flex-grow">
+                <!-- 카테고리 제거 -->
+                <h4
+                  class="text-sm font-bold hover:text-kuki-orange line-clamp-3 mt-1"
+                >
+                  [스포츠] '괴물' 투수, 메이저리그 진출 임박 소식
+                </h4>
+                <!-- 시간 정보 제거 -->
+              </div>
+            </a>
+
+            <!-- 서브 기사 3 (순서 변경: 이미지 -> 텍스트, 카테고리/시간 제거) -->
+            <a
+              href="newpaper.html"
+              class="flex space-x-4 group cursor-pointer hover:bg-kuki-beige/50 p-2 -m-2 rounded-lg transition duration-150"
+            >
+              <!-- 썸네일 영역 (왼쪽) -->
+              <div
+                class="flex-shrink-0 article-placeholder w-20 h-20 rounded-lg text-xs"
+                style="
+                  background-image: url(https://placehold.co/80x80/F7EDDD/634B28?text=Image);
+                  background-size: cover;
+                "
+              ></div>
+              <!-- 텍스트 영역 (오른쪽) -->
+              <div class="flex-grow">
+                <!-- 카테고리 제거 -->
+                <h4
+                  class="text-sm font-bold hover:text-kuki-brown line-clamp-3 mt-1"
+                >
+                  [경제] 최저 시급 인상안, 업계의 반응과 전망 분석
+                </h4>
+                <!-- 시간 정보 제거 -->
+              </div>
+            </a>
+          </div>
+
+          <!-- 2. 메인 기사 미디어 슬라이더 (중앙 6/12) -->
+          <!-- order-1 lg:order-2 로 유지 -->
+          <a
+            href="#"
+            class="lg:col-span-6 relative rounded-lg shadow-md overflow-hidden order-1 lg:order-2 cursor-pointer block transition duration-300 hover:shadow-xl h-full"
+          >
+            <div class="main-media-area h-full">
+              <div id="main-media-carousel" class="relative h-full w-full">
+                <!-- Slide 1 (Image Placeholder) -->
+                <div
+                  class="carousel-item h-full w-full absolute top-0 left-0 active"
+                  data-slide="1"
+                >
+                  <div
+                    class="w-full h-full text-white/90 flex items-center justify-center"
+                    style="
+                      background-color: #634b28;
+                      background-image: url(https://placehold.co/1000x562/7d654f/ffffff?text='대표' + '이미지' + 16:9);
+                      background-size: cover;
+                      background-position: center;
+                    "
+                  >
+                    <div class="p-3" style="border-radius: 25px">
+                      <p class="font-bold text-white" style="font-size: 20px">
+                        이미지 영역
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 2 (Video Placeholder) -->
+                <div
+                  class="carousel-item h-full w-full absolute top-0 left-0"
+                  data-slide="2"
+                >
+                  <div
+                    class="w-full h-full text-white/90 flex items-center justify-center"
+                    style="background-color: #5c452e"
+                  >
+                    <div class="p-8 text-center">
+                      <p class="text-2xl font-bold mb-3">▶ 영상 클립 (VIDEO)</p>
+                      <p class="text-sm">기사 내용을 담은 짧은 영상</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Slide 3 (Chart Placeholder) -->
+                <div
+                  class="carousel-item h-full w-full absolute top-0 left-0"
+                  data-slide="3"
+                >
+                  <div
+                    class="w-full h-full text-white/90 flex items-center justify-center"
+                    style="background-color: #8f7253"
+                  >
+                    <div class="p-8 text-center">
+                      <p class="text-2xl font-bold mb-3">📊 인포그래픽</p>
+                      <p class="text-sm">데이터 분석 자료</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 슬라이드 컨트롤 버튼 -->
+              <div
+                class="absolute inset-x-0 bottom-4 flex justify-center space-x-2 p-2 z-20"
+              >
+                <button
+                  type="button"
+                  onclick="event.preventDefault(); event.stopPropagation(); prevSlide();"
+                  class="p-2 rounded-full bg-white/50 text-kuki-brown hover:bg-white/80 transition"
+                >
+                  <!-- Left Arrow SVG -->
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 19l-7-7 7-7"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onclick="event.preventDefault(); event.stopPropagation(); nextSlide();"
+                  class="p-2 rounded-full bg-white/50 text-kuki-brown hover:bg-white/80 transition"
+                >
+                  <!-- Right Arrow SVG -->
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5l7 7-7 7"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </a>
+
+          <!-- 3. 메인 기사 텍스트 (우측 3/12) -->
+          <!-- order-3 로 유지 -->
+          <div
+            class="lg:col-span-3 flex flex-col justify-start space-y-4 lg:pr-4 order-3 h-full"
+          >
+            <!-- 상단 메인 기사 텍스트 (제목 + 요약) -->
+            <div class="mb-4 flex-shrink-0">
+              <a
+                href="newpaper.html"
+                class="block transition duration-300 hover:opacity-80"
+              >
+                <h2
+                  class="text-xl md:text-2xl font-extrabold leading-tight hover:text-kuki-orange transition duration-150"
+                >
+                  [가장 중요한 메인 기사 제목] 국가 정책 대전환 예고, 관련 여파
+                  분석
+                </h2>
+                <p class="text-gray-600 mt-3 mb-2 line-clamp-4 text-sm">
+                  메인 기사에 대한 간략한 요약 설명입니다. 심층 취재를 통해 심도
+                  있게 다뤄진 핵심 콘텐츠입니다.
+                </p>
+                <div class="text-xs text-gray-500 pt-1">
+                  <span>기자명</span> &middot; <span>20분 전</span> &middot;
+                  <span class="text-kuki-orange font-semibold"
+                    >심층 리포트</span
+                  >
+                </div>
+              </a>
+
+              <!-- 구분선 -->
+              <div class="border-t border-kuki-beige my-4"></div>
+
+              <!-- 하단 추가 기사 (NYT 스타일: 제목과 간단한 정보) -->
+              <a
+                href="newpaper.html"
+                class="block pt-2 transition duration-300 hover:opacity-80"
+              >
+                <h3
+                  class="text-md font-bold mt-2 leading-snug hover:text-kuki-orange transition duration-150"
+                >
+                  예비 심층 기사: 글로벌 경제 둔화 속 한국 시장의 활로는?
+                </h3>
+                <div class="text-xs text-gray-500 pt-1">
+                  <span>전문가</span> &middot; <span>1일 전</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 2. 최신 주요 기사 & 오피니언 섹션 *** -->
+      <section class="py-8 mb-12">
+        <div
+          class="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-equal-height items-stretch"
+        >
+          <!-- 좌측 (2/3): 최신 주요 기사 (2개 항목으로 간소화 및 시각 집중) -->
+          <div class="lg:col-span-2 space-y-6">
+            <div class="content-box flex flex-col red-box">
+              <!-- 기사 1 (큼직한 썸네일 + 제목) -->
+              <a
+                href="newpaper.html"
+                class="main-article-item group cursor-pointer flex-shrink-0 row-direction"
+              >
+                <div
+                  class="flex-shrink-0 article-placeholder w-40 h-28 rounded-lg text-xs"
+                  style="
+                    background-image: url(https://placehold.co/160x112/F7EDDD/634B28?text='주목할' + '기사' + 1);
+                    background-size: cover;
+                  "
+                ></div>
+                <div class="flex-grow">
+                  <span class="text-xs font-semibold text-kuki-orange uppercase"
+                    >정치</span
+                  >
+                  <h3
+                    class="text-xl font-extrabold hover:text-kuki-brown line-clamp-3 mt-1 leading-snug"
+                  >
+                    총선 D-100, 여야 막판 스퍼트... 핵심 공약 비교 분석<br />
+                    (최대 2줄)
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                    민심의 향방을 가를 주요 공약들을 심층적으로 비교 분석하고,
+                    유권자들이 알아야 할 핵심 포인트를 정리합니다.
+                  </p>
+                </div>
+              </a>
+              <!-- 기사 2 (큼직한 썸네일 + 제목) -->
+              <a
+                href="newpaper.html"
+                class="main-article-item group cursor-pointer flex-shrink-0 row-direction"
+              >
+                <div
+                  class="flex-shrink-0 article-placeholder w-40 h-28 rounded-lg text-xs"
+                  style="
+                    background-image: url(https://placehold.co/160x112/F7EDDD/634B28?text='주목할' + '기사' + 2);
+                    background-size: cover;
+                  "
+                ></div>
+                <div class="flex-grow">
+                  <span class="text-xs font-semibold text-kuki-brown uppercase"
+                    >IT/과학</span
+                  >
+                  <h3
+                    class="text-xl font-extrabold hover:text-kuki-orange line-clamp-3 mt-1 leading-snug"
+                  >
+                    AI 기술 윤리 논쟁 심화, 국회 차원의 규제 방안 논의 착수
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                    초거대 AI 모델의 등장과 함께 불거진 윤리 문제와 국회에서
+                    발의된 인공지능 관련 법안의 쟁점을 살펴봅니다.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- 우측 (1/3): 오피니언 섹션 -->
+          <div class="lg:col-span-1 border-kuki-beige lg:pl-0">
+            <div
+              class="content-box flex flex-col justify-start lg:border-l lg:pl-8 -ml-8"
+            >
+              <h2
+                class="text-2xl font-bold text-kuki-brown mb-6 border-b-2 border-kuki-orange pb-2 flex-shrink-0"
+              >
+                오피니언
+              </h2>
+              <div class="space-y-6 flex-grow overflow-hidden">
+                <!-- 오피니언 1 (칼럼 - 필자 사진 포함) -->
+                <a
+                  href="newpaper.html"
+                  class="flex items-start space-x-3 group cursor-pointer pb-2 border-b border-kuki-beige hover:bg-kuki-beige/50 p-2 -m-2 rounded-lg transition duration-150"
+                >
+                  <div
+                    class="flex-shrink-0 bg-gray-300 w-10 h-10 rounded-full"
+                    style="
+                      background-image: url(https://placehold.co/40x40/634B28/F7EDDD?text=Photo);
+                      background-size: cover;
+                    "
+                  ></div>
+                  <div class="flex-grow">
+                    <h3
+                      class="text-md font-medium leading-snug group-hover:text-kuki-orange transition duration-150"
+                    >
+                      이하경 칼럼 | 꿩 잡고 닭 잡는 법
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-0.5">이하경 기자</p>
+                  </div>
+                </a>
+
+                <!-- 오피니언 2 (칼럼 - 필자 사진 포함) -->
+                <a
+                  href="newpaper.html"
+                  class="flex items-start space-x-3 group cursor-pointer pb-2 border-b border-kuki-beige hover:bg-kuki-beige/50 p-2 -m-2 rounded-lg transition duration-150"
+                >
+                  <div
+                    class="flex-shrink-0 bg-gray-300 w-10 h-10 rounded-full"
+                    style="
+                      background-image: url(https://placehold.co/40x40/634B28/F7EDDD?text=Photo);
+                      background-size: cover;
+                    "
+                  ></div>
+                  <div class="flex-grow">
+                    <h3
+                      class="text-md font-medium leading-snug group-hover:text-kuki-orange transition duration-150"
+                    >
+                      장세정의 시각각 | '캄보디아 커넥션' 불똥 어디까지?
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-0.5">장세정 논설위원</p>
+                  </div>
+                </a>
+
+                <!-- 오피니언 3 (칼럼 - 필자 사진 포함) -->
+                <a
+                  href="newpaper.html"
+                  class="flex items-start space-x-3 group cursor-pointer pb-2 border-b border-kuki-beige hover:bg-kuki-beige/50 p-2 -m-2 rounded-lg transition duration-150"
+                >
+                  <div
+                    class="flex-shrink-0 bg-gray-300 w-10 h-10 rounded-full"
+                    style="
+                      background-image: url(https://placehold.co/40x40/634B28/F7EDDD?text=Photo);
+                      background-size: cover;
+                    "
+                  ></div>
+                  <div class="flex-grow">
+                    <h3
+                      class="text-md font-medium leading-snug group-hover:text-kuki-orange transition duration-150"
+                    >
+                      리셋 코리아 기고 | 기후에너지 환경부 신설 의미 살리려면
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-0.5">
+                      유연종 기후변화대응 본부장
+                    </p>
+                  </div>
+                </a>
+
+                <!-- 오피니언 4 (추가 칼럼 항목) -->
+                <a
+                  href="newpaper.html"
+                  class="flex items-start space-x-3 group cursor-pointer hover:bg-kuki-beige/50 p-2 -m-2 rounded-lg transition duration-150"
+                >
+                  <div
+                    class="flex-shrink-0 bg-gray-300 w-10 h-10 rounded-full"
+                    style="
+                      background-image: url(https://placehold.co/40x40/634B28/F7EDDD?text=Photo);
+                      background-size: cover;
+                    "
+                  ></div>
+                  <div class="flex-grow">
+                    <h3
+                      class="text-md font-medium leading-snug group-hover:text-kuki-orange transition duration-150"
+                    >
+                      편집국장의 눈 | 독자 참여가 뉴스의 미래를 만든다
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-0.5">김OO 편집국장</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 3. 쿠키 오리지널 심층 기사 섹션 (새로 추가된 심층 기사 전용 영역) *** -->
+      <section
+        class="py-12 bg-kuki-brown text-white rounded-xl shadow-lg mb-12"
+      >
+        <div class="px-4 sm:px-6 lg:px-8">
+          <h2
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+            class="text-2xl font-bold text-kuki-orange mb-6 border-b-2 border-kuki-orange pb-2"
+          >
+            <span>✨ 쿠키 오리지널 (심층 기사)</span>
+            <span class="a_hover"
+              ><a
+                style="font-size: 16px; color: #ccc; font-weight: 400"
+                href="./deep_main.html"
+                >전체보기</a
+              ></span
+            >
+            <style>
+              .a_hover a:hover {
+                border-bottom: 1.2px solid #ccc;
+              }
+            </style>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 심층 기사 카드 1 -->
+            <a
+              href="./deep_detail.html"
+              class="block bg-kuki-brown/90 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 group"
+            >
+              <div
+                class="article-placeholder h-32 rounded-lg mb-3 bg-kuki-beige text-kuki-brown text-sm font-bold"
+              >
+                심층 이미지
+              </div>
+              <span class="text-xs font-semibold text-kuki-orange uppercase"
+                >특집 기획</span
+              >
+              <h3
+                class="text-lg font-bold mt-1 line-clamp-3 group-hover:text-kuki-beige transition duration-150"
+              >
+                [단독] 신성장 동력 발굴, K-기업 10년 전략 심층 분석
+              </h3>
+            </a>
+
+            <!-- 심층 기사 카드 2 -->
+            <a
+              href="./deep_detail.html"
+              class="block bg-kuki-brown/90 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 group"
+            >
+              <div
+                class="article-placeholder h-32 rounded-lg mb-3 bg-kuki-beige text-kuki-brown text-sm font-bold"
+              >
+                심층 이미지
+              </div>
+              <span class="text-xs font-semibold text-kuki-orange uppercase"
+                >인터뷰</span
+              >
+              <h3
+                class="text-lg font-bold mt-1 line-clamp-3 group-hover:text-kuki-beige transition duration-150"
+              >
+                MZ 세대와 소통하는 법: 새로운 리더십의 조건 (전문가 대담)
+              </h3>
+            </a>
+
+            <!-- 심층 기사 카드 3 -->
+            <a
+              href="./deep_detail.html"
+              class="block bg-kuki-brown/90 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 group"
+            >
+              <div
+                class="article-placeholder h-32 rounded-lg mb-3 bg-kuki-beige text-kuki-brown text-sm font-bold"
+              >
+                심층 이미지
+              </div>
+              <span class="text-xs font-semibold text-kuki-orange uppercase"
+                >여론조사</span
+              >
+              <h3
+                class="text-lg font-bold mt-1 line-clamp-3 group-hover:text-kuki-beige transition duration-150"
+              >
+                청년층 삶의 만족도, 최저점 기록... 원인 분석 보고서
+              </h3>
+            </a>
+
+            <!-- 심층 기사 카드 4 -->
+            <a
+              href="./deep_detail.html"
+              class="block bg-kuki-brown/90 p-4 rounded-xl shadow-md hover:shadow-xl transition duration-300 group"
+            >
+              <div
+                class="article-placeholder h-32 rounded-lg mb-3 bg-kuki-beige text-kuki-brown text-sm font-bold"
+              >
+                심층 이미지
+              </div>
+              <span class="text-xs font-semibold text-kuki-orange uppercase"
+                >사진 기획</span
+              >
+              <h3
+                class="text-lg font-bold mt-1 line-clamp-3 group-hover:text-kuki-beige transition duration-150"
+              >
+                사라져가는 골목 상권: 사진으로 기록한 추억의 장소
+              </h3>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 4. 추가된 최신 주요 기사 섹션 (반복) & 광고 *** -->
+      <section class="py-8 mb-12">
+        <div
+          class="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-equal-height items-stretch"
+        >
+          <!-- 좌측 (2/3): 최신 주요 기사 (2개 항목으로 간소화 및 시각 집중) -->
+          <div class="lg:col-span-2 space-y-6">
+            <div class="content-box flex flex-col">
+              <!-- 기사 1 (큼직한 썸네일 + 제목) -->
+              <a
+                href="newpaper.html"
+                class="main-article-item group cursor-pointer flex-shrink-0 row-direction"
+              >
+                <div
+                  class="flex-shrink-0 article-placeholder w-40 h-28 rounded-lg text-xs"
+                  style="
+                    background-image: url(https://placehold.co/160x112/F7EDDD/634B28?text='추가' + '기사' + 3);
+                    background-size: cover;
+                    width: 400px;
+                    height: 220px;
+                  "
+                ></div>
+                <div class="flex-grow">
+                  <span class="text-xs font-semibold text-kuki-orange uppercase"
+                    >전국</span
+                  >
+                  <h3
+                    class="text-xl font-extrabold hover:text-kuki-brown line-clamp-3 mt-1 leading-snug"
+                  >
+                    수도권 광역 철도망 확장... 교통 혁명 예고 (최대 2줄)
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                    수도권 주민들의 출퇴근 시간을 단축하고 지역 경제 활성화에
+                    기여할 광역 철도망 건설 계획이 확정되었습니다.수도권
+                    주민들의 출퇴근 시간을 단축하고 지역 경제 활성화에 기여할
+                    광역 철도망 건설 계획이 확정되었습니다.
+                  </p>
+                </div>
+              </a>
+              <!-- 기사 2 (큼직한 썸네일 + 제목) -->
+              <a
+                href="newpaper.html"
+                class="main-article-item group cursor-pointer flex-shrink-0 row-direction"
+              >
+                <div
+                  class="flex-shrink-0 article-placeholder w-40 h-28 rounded-lg text-xs"
+                  style="
+                    background-image: url(https://placehold.co/160x112/F7EDDD/634B28?text='추가' + '기사' + 4);
+                    background-size: cover;
+                    width: 400px;
+                    height: 220px;
+                  "
+                ></div>
+                <div class="flex-grow">
+                  <span class="text-xs font-semibold text-kuki-brown uppercase"
+                    >생활건강</span
+                  >
+                  <h3
+                    class="text-xl font-extrabold hover:text-kuki-orange line-clamp-3 mt-1 leading-snug"
+                  >
+                    미세먼지 예보 정확도 향상... 새로운 측정 기술 도입
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                    국민 건강을 위협하는 미세먼지에 대응하기 위해 정부가 새로운
+                    실시간 측정 및 예보 기술을 도입합니다.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- 우측 (1/3): 광고 공란 2개 -->
+          <div class="lg:col-span-1 border-kuki-beige lg:pl-0">
+            <div
+              class="content-box flex flex-col justify-start lg:border-l lg:pl-8 -ml-8 h-full"
+            >
+              <div class="flex flex-col space-y-4 flex-grow pt-4">
+                <!-- 광고 공란 1 -->
+                <div class="ad-placeholder">광고 공란 1 (300x250)</div>
+                <!-- 광고 공란 2 -->
+                <div class="ad-placeholder">광고 공란 2 (300x250)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 5. NEW! 많이 본 기사 섹션 (넷플릭스 TOP 10 스타일) *** -->
+      <section class="py-12 mb-12 bg-gray-900 text-white rounded-xl shadow-lg">
+        <div class="px-4 sm:px-6 lg:px-8">
+          <!-- 제목 수정: 오늘은 TOP 10 -> 많이 본 기사 -->
+          <h2
+            class="text-2xl font-extrabold text-white mb-6 border-b-2 border-kuki-orange pb-2"
+          >
+            🔥 많이 본 기사
+          </h2>
+
+          <!-- TOP 10 기사 목록 (가로 스크롤) -->
+          <div class="top-10-grid scrollbar-hide">
+            <!-- TOP 1 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 1 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">1</span>
+                <div class="top-10-title">
+                  '살인적' 전세가 폭등, 정부 긴급 대책 발표
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 2 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 2 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">2</span>
+                <div class="top-10-title">
+                  '짜장면 랩소디': 50년 노포의 비밀 레시피
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 3 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 3 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">3</span>
+                <div class="top-10-title">
+                  [단독] 북미 정상회담 비하인드 스토리
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 4 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 4 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">4</span>
+                <div class="top-10-title">
+                  '닥터 슬럼프' 후속작, 캐스팅 최종 확정
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 5 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 5 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">5</span>
+                <div class="top-10-title">
+                  조선 시대 군복의 비밀을 찾아서 (다큐멘터리)
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 6 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 6 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">6</span>
+                <div class="top-10-title">
+                  "절대 무리 아님" 미라클 모닝 챌린지 후기
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 7 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 7 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">7</span>
+                <div class="top-10-title">
+                  마이 리틀 유니버스: 덕질 문화의 재조명
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 8 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 8 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">8</span>
+                <div class="top-10-title">
+                  선산 (웹툰 원작 드라마) 캐스팅 논란 정리
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 9 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 9 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">9</span>
+                <div class="top-10-title">
+                  아웃라이어, 성공 신화의 비밀을 파헤치다
+                </div>
+              </div>
+            </a>
+
+            <!-- TOP 10 -->
+            <a href="newpaper.html" class="top-10-item">
+              <div
+                class="top-10-image"
+                style="
+                  background-image: url(https://placehold.co/200x250/374151/FFFFFF?text='TOP' + 10 + '썸네일');
+                  background-size: cover;
+                  background-position: center;
+                "
+              >
+                <span class="rank-number">10</span>
+                <div class="top-10-title">
+                  사랑은 계속된다 (로맨스 소설 리뷰)
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 6. 추가된 최신 주요 기사 섹션 (반복) & 인터뷰 *** -->
+      <section class="py-8 mb-12">
+        <div
+          class="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-equal-height items-stretch"
+        >
+          <!-- 좌측 (2/3): 최신 주요 기사 (2개 항목으로 간소화 및 시각 집중) -->
+          <div class="lg:col-span-2 space-y-6">
+            <div class="content-box flex flex-col red-box">
+              <!-- 기사 1 (큼직한 썸네일 + 제목) -->
+              <a
+                href="newpaper.html"
+                class="main-article-item group cursor-pointer flex-shrink-0 row-direction"
+              >
+                <div
+                  class="flex-shrink-0 article-placeholder w-40 h-28 rounded-lg text-xs"
+                  style="
+                    background-image: url(https://placehold.co/160x112/F7EDDD/634B28?text='추가' + '기사' + 5);
+                    background-size: cover;
+                  "
+                ></div>
+                <div class="flex-grow">
+                  <span class="text-xs font-semibold text-kuki-orange uppercase"
+                    >사회</span
+                  >
+                  <h3
+                    class="text-xl font-extrabold hover:text-kuki-brown line-clamp-3 mt-1 leading-snug"
+                  >
+                    [단독] 신림동 칼부림 사건 후속 보도: 피의자 가족들의 고통
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                    잔혹한 범죄 이후 남겨진 가족들이 겪는 사회적 고립과 심리적
+                    어려움을 심층 취재했습니다.
+                  </p>
+                </div>
+              </a>
+              <!-- 기사 2 (큼직한 썸네일 + 제목) -->
+              <a
+                href="newpaper.html"
+                class="main-article-item group cursor-pointer flex-shrink-0 row-direction"
+              >
+                <div
+                  class="flex-shrink-0 article-placeholder w-40 h-28 rounded-lg text-xs"
+                  style="
+                    background-image: url(https://placehold.co/160x112/F7EDDD/634B28?text='추가' + '기사' + 6);
+                    background-size: cover;
+                  "
+                ></div>
+                <div class="flex-grow">
+                  <span class="text-xs font-semibold text-kuki-brown uppercase"
+                    >국제</span
+                  >
+                  <h3
+                    class="text-xl font-extrabold hover:text-kuki-orange line-clamp-3 mt-1 leading-snug"
+                  >
+                    유럽 에너지 위기 심화, 러시아-우크라이나 사태 장기화 전망
+                  </h3>
+                  <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                    유럽 각국의 에너지 수급 상황과 정부의 대응책, 그리고 겨울철
+                    전망을 분석했습니다.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- 우측 (1/3): 인터뷰 기사 2개 -->
+          <div class="lg:col-span-1 border-kuki-beige lg:pl-0">
+            <div
+              class="content-box flex flex-col justify-start lg:border-l lg:pl-8 -ml-8 h-full"
+            >
+              <h2
+                class="text-2xl font-bold text-kuki-brown mb-6 border-b-2 border-kuki-orange pb-2 flex-shrink-0"
+              >
+                🎤 인터뷰
+              </h2>
+
+              <div class="flex flex-col space-y-4 flex-grow">
+                <!-- 인터뷰 기사 1 (상단) -->
+                <a href="newpaper.html" class="block group flex-shrink-0">
+                  <div
+                    class="w-full article-placeholder h-32 rounded-lg mb-2 text-sm"
+                    style="
+                      background-image: url(https://placehold.co/300x120/F7EDDD/634B28?text='인터뷰' + 3);
+                      background-size: cover;
+                    "
+                  ></div>
+                  <p class="text-xs font-semibold text-kuki-orange uppercase">
+                    인물 포커스
+                  </p>
+                  <h3
+                    class="text-md font-bold line-clamp-2 hover:text-kuki-orange"
+                  >
+                    인공지능 연구의 선구자, 김철수 박사를 만나다
+                  </h3>
+                  <p class="text-xs text-gray-500 mt-0.5">김철수 박사</p>
+                </a>
+                <!-- 인터뷰 기사 2 (하단) -->
+                <a href="newpaper.html" class="block group flex-shrink-0">
+                  <div
+                    class="w-full article-placeholder h-32 rounded-lg mb-2 text-sm"
+                    style="
+                      background-image: url(https://placehold.co/300x120/F7EDDD/634B28?text='인터뷰' + 4);
+                      background-size: cover;
+                    "
+                  ></div>
+                  <p class="text-xs font-semibold text-kuki-brown uppercase">
+                    청년의 꿈
+                  </p>
+                  <h3
+                    class="text-md font-bold line-clamp-2 hover:text-kuki-orange"
+                  >
+                    크라우드 펀딩으로 꿈을 이룬 20대 여성 사업가
+                  </h3>
+                  <p class="text-xs text-gray-500 mt-0.5">박지영 대표</p>
+                </a>
+                <div class="flex-grow"></div>
+                <!-- 하단 빈 공간 채우기 -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 7. NEW! 멀티미디어 섹션 (조선일보 스타일 변형) *** -->
+      <section
+        class="py-12 mb-12 media-section-bg relative"
+        style="padding-top: 4rem"
+      >
+        <h2
+          class="absolute"
+          style="
+            color: #ff9100;
+            font-size: 2rem;
+            font-weight: 800;
+            top: 10px;
+            left: 30px;
+          "
+        >
+          멀티미디어
+        </h2>
+        <div
+          class="px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 items-stretch"
+        >
+          <!-- 좌측 (1/2): 메인 포토/영상 썸네일 + 제목 -->
+          <div
+            class="lg:w-1/2 block relative rounded-lg overflow-hidden shadow-xl transition duration-300 hover:opacity-90"
+          >
+            <!-- 섹션 제목 (좌측 상단으로 이동) -->
+            <a
+              href="newpaper.html"
+              class="block w-full h-full"
+              style="height: 100%"
+            >
+              <div class="w-full" style="padding-top: 56.25%">
+                <!-- 16:9 비율 유지 -->
+                <div
+                  class="article-placeholder absolute inset-0 text-2xl font-extrabold text-white"
+                  style="
+                    background-image: url(https://placehold.co/700x394/9f7a5b/ffffff?text='메인' + '포토/영상' + '콘텐츠');
+                    background-color: #9f7a5b;
+                    border-radius: 0.5rem;
+                    height: 100%;
+                    border: 2px solid #ff9100;
+                  "
+                >
+                  <!-- 메인 썸네일 내부 제목 -->
+                  <div class="main-media-title-inner">
+                    <h3 class="text-2xl font-extrabold leading-tight">
+                      [주목] 이주의 하이라이트 영상: 세계 경제 포럼 현장
+                    </h3>
+                    <p class="text-sm text-gray-300 mt-2">
+                      최고의 시청률을 기록한 포토/영상 콘텐츠를 크게 보여줍니다.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- 우측 (1/2): 서브 콘텐츠 4개 (2x2 썸네일 + 제목) -->
+          <div
+            class="lg:w-1/2 flex flex-col justify-between space-y-4 pt-4 lg:pt-0"
+          >
+            <div class="right-media-grid flex-grow">
+              <!-- 콘텐츠 1 -->
+              <a href="newpaper.html" class="block group right-media-item">
+                <div class="thumb relative">
+                  <div class="media-thumb-placeholder">썸네일 1 (16:9)</div>
+                </div>
+                <h3
+                  class="text-sm font-medium line-clamp-2 mt-2 group-hover:text-kuki-orange"
+                >
+                  [포토] 오늘의 이슈 현장 생생한 모습
+                </h3>
+              </a>
+              <!-- 콘텐츠 2 -->
+              <a href="newpaper.html" class="block group right-media-item">
+                <div class="thumb relative">
+                  <div class="media-thumb-placeholder">썸네일 2 (16:9)</div>
+                </div>
+                <h3
+                  class="text-sm font-medium line-clamp-2 mt-2 group-hover:text-kuki-orange"
+                >
+                  [영상] 5분으로 보는 금주 경제 동향
+                </h3>
+              </a>
+              <!-- 콘텐츠 3 -->
+              <a href="newpaper.html" class="block group right-media-item">
+                <div class="thumb relative">
+                  <div class="media-thumb-placeholder">썸네일 3 (16:9)</div>
+                </div>
+                <h3
+                  class="text-sm font-medium line-clamp-2 mt-2 group-hover:text-kuki-orange"
+                >
+                  [포토] 스포츠 스타들의 명장면
+                </h3>
+              </a>
+              <!-- 콘텐츠 4 -->
+              <a class="block group right-media-item">
+                <div class="thumb relative">
+                  <div class="media-thumb-placeholder">썸네일 4 (16:9)</div>
+                </div>
+                <h3
+                  class="text-sm font-medium line-clamp-2 mt-2 group-hover:text-kuki-orange"
+                >
+                  [영상] 화제의 동물들, 귀여움 주의
+                </h3>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 8. 전국 기사 섹션 (새로 추가) *** -->
+      <section class="py-8 mb-12">
+        <h2
+          class="text-2xl font-bold text-kuki-brown mb-6 border-b-2 border-kuki-orange pb-2 flex justify-between items-end"
+        >
+          전국
+          <a
+            href="#"
+            class="text-sm font-medium text-kuki-orange hover:text-kuki-brown transition duration-150"
+            >전체보기 ></a
+          >
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          <!-- 1열 (썸네일 좌측, 텍스트 우측) -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                인천 경제청, 아트센터 인천 2단계 건립 사업 총괄 조건부 통과
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">인천경제자유구역청</p>
+            </div>
+          </div>
+
+          <!-- 2열 -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                경기도 시내버스 '택리스', 5년간 월세 32억 쏟아붓고도 지난해
+                이용률 0.1%
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">경기도 교통국</p>
+            </div>
+          </div>
+
+          <!-- 3열 -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                인제 자작나무 숲 30만 인파 몰려... 가을 정취 '만끽'
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">강원도청</p>
+            </div>
+          </div>
+
+          <!-- 4열 -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                2025 국제와인 EXPO 컨벤션 유치... 대전은 위대하다
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">대전시청</p>
+            </div>
+          </div>
+
+          <!-- 5열 -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                대전 여전 총회 '예술과의 융합 도시' 일할 기회
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">대전 문화재단</p>
+            </div>
+          </div>
+
+          <!-- 6열 -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                '영주 풍기인삼축제' 개막... 9일간 체류형 관광 명소로 자리매김
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">영주시청</p>
+            </div>
+          </div>
+
+          <!-- 7열 -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                경북의 가을, “APEC 정상회의와 함께 각종 축제로 물들이다”
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">대구경북</p>
+            </div>
+          </div>
+
+          <!-- 8열 -->
+          <div class="region-news-item">
+            <div
+              class="region-news-thumb"
+              style="
+                background-image: url(https://placehold.co/100x70/F7EDDD/634B28?text=Image);
+              "
+            ></div>
+            <div class="flex-grow">
+              <h3
+                class="text-base font-bold leading-snug hover:text-kuki-orange line-clamp-2"
+              >
+                캄보디아서 피살된 한국인 대학생, 국내 대포통장 모집조직 주범
+                검거
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">대구경북</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- *** 9. 카테고리 나열 섹션 (SEO 최적화) *** -->
+      <section
+        class="py-8 mb-12 bg-white rounded-xl shadow-lg"
+        style="padding: 1rem"
+      >
+        <h2
+          class="text-2xl font-bold text-kuki-brown mb-6 border-b-2 border-kuki-orange pb-2"
+        >
+          주요 키워드 & 카테고리
+        </h2>
+        <div class="seo-category-grid">
+          <!-- 정치 -->
+          <div class="seo-category-col">
+            <h4>정치</h4>
+            <ul class="space-y-1">
+              <li><a href="#">정치일반</a></li>
+              <li><a href="#">국회</a></li>
+              <li><a href="#">대통령실</a></li>
+              <li><a href="#">국방/외교</a></li>
+              <li><a href="#">북한</a></li>
+            </ul>
+          </div>
+
+          <!-- 경제 -->
+          <div class="seo-category-col">
+            <h4>경제</h4>
+            <ul class="space-y-1">
+              <li><a href="#">경제일반</a></li>
+              <li><a href="#">금 융</a></li>
+              <li><a href="#">증권</a></li>
+              <li><a href="#">부동산</a></li>
+              <li><a href="#">생활경제</a></li>
+            </ul>
+          </div>
+
+          <!-- 산업 -->
+          <div class="seo-category-col">
+            <h4>산업</h4>
+            <ul class="space-y-1">
+              <li><a href="#">산업일반</a></li>
+              <li><a href="#">기업/CEO</a></li>
+              <li><a href="#">IT/과학</a></li>
+              <li><a href="#">중화학</a></li>
+              <li><a href="#">자동차</a></li>
+              <li><a href="#">유통</a></li>
+              <li><a href="#">중기/벤처</a></li>
+              <li><a href="#">속보</a></li>
+            </ul>
+          </div>
+
+          <!-- 사회 -->
+          <div class="seo-category-col">
+            <h4>사회</h4>
+            <ul class="space-y-1">
+              <li><a href="#">사회일반</a></li>
+              <li><a href="#">사건/사고</a></li>
+              <li><a href="#">교육</a></li>
+              <li><a href="#">노동</a></li>
+              <li><a href="#">환경</a></li>
+            </ul>
+          </div>
+
+          <!-- 건강/생활 -->
+          <div class="seo-category-col">
+            <h4>건강/생활</h4>
+            <ul class="space-y-1">
+              <li><a href="#">건강일반</a></li>
+              <li><a href="#">정책</a></li>
+              <li><a href="#">건강/의료</a></li>
+              <li><a href="#">제약/바이오</a></li>
+              <li><a href="#">복지</a></li>
+              <li><a href="#">아동/청소년</a></li>
+              <li><a href="#">여성</a></li>
+            </ul>
+          </div>
+
+          <!-- 문화 -->
+          <div class="seo-category-col">
+            <h4>문화</h4>
+            <ul class="space-y-1">
+              <li><a href="#">문화일반</a></li>
+              <li><a href="#">방송</a></li>
+              <li><a href="#">가요</a></li>
+              <li><a href="#">영화</a></li>
+              <li><a href="#">뮤지컬/연극</a></li>
+            </ul>
+          </div>
+
+          <!-- 스포츠 (추가) -->
+          <div class="seo-category-col">
+            <h4>스포츠</h4>
+            <ul class="space-y-1">
+              <li><a href="#">스포츠일반</a></li>
+              <li><a href="#">해외축구</a></li>
+              <li><a href="#">해외야구</a></li>
+              <li><a href="#">배구</a></li>
+              <li><a href="#">농구</a></li>
+              <li><a href="#">올림픽</a></li>
+              <li><a href="#">축구</a></li>
+              <li><a href="#">야구</a></li>
+              <li><a href="#">바둑/당구</a></li>
+              <li><a href="#">게임</a></li>
+              <li><a href="#">e-스포츠</a></li>
+            </ul>
+          </div>
+
+          <!-- K-Contents & 브랜드 (추가) -->
+          <div class="seo-category-col">
+            <h4>K-Contents & 브랜드</h4>
+            <ul class="space-y-1">
+              <li><a href="#">쿠키 오리지널</a></li>
+              <li><a href="#">이슈인사이드</a></li>
+              <li><a href="#">T.LAB</a></li>
+              <li><a href="#">쿠키건강TV</a></li>
+              <li><a href="#">쿠키미디어</a></li>
+              <li><a href="#">내일로 여행</a></li>
+              <li><a href="#">기자 수첩</a></li>
+              <li><a href="#">섹션 지면 보기</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. CTA 섹션 (뉴스레터/앱 다운로드) -->
+      <section class="py-16 bg-kuki-orange rounded-xl shadow-xl mb-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+            매일 아침, 놓치지 말아야 할 뉴스를 받아보세요
+          </h2>
+          <p class="text-kuki-beige text-lg mb-8">
+            가장 빠르고 정확한 뉴스를 이메일 뉴스레터 또는 앱 알림으로 받아보고
+            지식을 확장하세요.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
+          >
+            <input
+              type="email"
+              placeholder="이메일 주소를 입력하세요"
+              class="w-full sm:w-80 px-5 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-white text-gray-800"
+              aria-label="이메일 입력"
+            />
+            <button
+              class="bg-white hover:bg-gray-100 text-kuki-orange font-bold py-3 px-8 rounded-xl shadow-lg transition duration-200 transform hover:scale-105 text-lg"
+            >
+              뉴스레터 구독
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 11. 푸터 (KN Chocolate Brown 적용) -->
+    <footer class="bg-kuki-brown text-white py-12 mt-12">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-5 gap-8"
+      >
+        <!-- 로고 및 정보 -->
+        <div class="col-span-2 md:col-span-2">
+          <a
+            href="#"
+            class="text-2xl font-extrabold text-kuki-orange tracking-tight mb-3 block"
+            >쿠키뉴스</a
+          >
+          <p class="text-sm text-kuki-beige/80">
+            <span class="font-bold">발행인</span>: OOO |
+            <span class="font-bold">편집인</span>: XXX<br />
+            <span class="font-bold">주소</span>: 서울특별시 |
+            <span class="font-bold">대표전화</span>: 02-1234-5678<br />
+            <span class="font-bold">등록번호</span>: 서울 아00000 |
+            <span class="font-bold">발행일</span>: 2025.01.01
+          </p>
+        </div>
+
+        <!-- 회사 정보 (세부 링크) -->
+        <div class="col-span-1 md:col-start-4">
+          <h4 class="text-lg font-semibold mb-4 text-kuki-beige">회사</h4>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white">회사 소개</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white">광고 문의</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white"
+                >개인정보처리방침</a
+              >
+            </li>
+          </ul>
+        </div>
+        <!-- 기타 정보 (법적 고지) -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4 text-kuki-beige">기타</h4>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white">이용약관</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white"
+                >청소년 보호 정책</a
+              >
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white"
+                >편집권 독립 선언</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="mt-12 border-t border-gray-700 pt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500"
+      >
+        &copy; 2025 쿠키뉴스. All Rights Reserved. 본 콘텐츠의 저작권은
+        쿠키뉴스에 있습니다.
+      </div>
+    </footer>
+
+    <script>
+      let currentSlide = 1;
+
+      // 함수를 전역으로 선언하여 HTML onclick 이벤트에서 접근 가능하도록 수정
+      window.showSlide = function (n) {
+        const slides = document.querySelectorAll(
+          "#main-media-carousel .carousel-item"
+        );
+        const totalSlides = slides.length;
+
+        slides.forEach((slide) => {
+          slide.classList.remove("active");
+        });
+
+        if (n > totalSlides) {
+          currentSlide = 1;
+        } else if (n < 1) {
+          currentSlide = totalSlides;
+        } else {
+          currentSlide = n;
+        }
+
+        const activeSlide = document.querySelector(
+          `[data-slide="${currentSlide}"]`
+        );
+        if (activeSlide) {
+          activeSlide.classList.add("active");
+        }
+      };
+
+      window.nextSlide = function () {
+        showSlide(currentSlide + 1);
+      };
+
+      window.prevSlide = function () {
+        showSlide(currentSlide - 1);
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // 초기 슬라이드 설정
+        showSlide(1);
+
+        function updateDateTimeAndWeather() {
+          // 현재 날짜 및 요일 설정
+          const today = new Date();
+          // 날짜 예시: 2025년 10월 15일 (수)
+          const year = 2025; //today.getFullYear();
+          const month = 10; //today.getMonth() + 1;
+          const day = 15; //today.getDate();
+          const dayStr = "수"; //['일', '월', '화', '수', '목', '금', '토'][today.getDay()];
+
+          const formattedDate = `${year}년 ${month}월 ${day}일 (${dayStr})`;
+          document.getElementById("current-date").textContent = formattedDate;
+
+          // 날씨 설정: 비 (우산 이모티콘)
+          let weatherEmoji = "☂️";
+
+          document.getElementById("weather-icon").textContent = weatherEmoji;
+        }
+
+        updateDateTimeAndWeather();
+      });
+    </script>
+  </body>
+</html>

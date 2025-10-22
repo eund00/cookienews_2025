@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>KUKINEWS - 희망 캠페인</title>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;family=Merriweather:wght@400;700;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background-light": "#FFFFFF",
+              "background-dark": "#121212",
+              "foreground-light": "#1a1a1a",
+              "foreground-dark": "#e5e7eb",
+              "muted-foreground-light": "#525252",
+              "muted-foreground-dark": "#a3a3a3",
+              "card-light": "#FFFFFF",
+              "card-dark": "#1e1e1e",
+              "border-light": "#e5e5e5",
+              "border-dark": "#262626",
+              brand: "#1c4f99",
+            },
+            fontFamily: {
+              sans: ["Noto Sans KR", "sans-serif"],
+              serif: ["Merriweather", "serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --border-light: rgb(299 299 299);
+      }
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Merriweather", serif;
+      }
+      .scroll-snap-x {
+        scroll-snap-type: x mandatory;
+      }
+      .scroll-snap-start {
+        scroll-snap-align: start;
+      }
+      .magazine-hero {
+        position: relative;
+        height: 600px;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+      }
+      .magazine-overlay {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 2rem;
+        border-radius: 0.5rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .editorial-snippet {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.5rem;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+      .editorial-snippet:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+      .editorial-snippet img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        transition: transform 0.3s ease-in-out;
+      }
+      .editorial-snippet:hover img {
+        transform: scale(1.05);
+      }
+      .editorial-snippet-content {
+        padding: 1rem;
+        background-color: white;
+        color: #1a1a1a;
+      }
+      .dark .editorial-snippet-content {
+        background-color: #1e1e1e;
+        color: #e5e7eb;
+      }
+      .story-shop-module {
+        background-color: var(--card-light);
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+      .dark .story-shop-module {
+        background-color: var(--card-dark);
+      }
+      .product-card {
+        border: 1px solid var(--border-light);
+        border-radius: 0.5rem;
+        overflow: hidden;
+        transition: transform 0.2s ease-in-out;
+      }
+      .dark .product-card {
+        border: 1px solid var(--border-dark);
+      }
+      .product-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      }
+      .news-article-snippet {
+        max-height: 4.5rem;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+      .news-article-snippet.expanded {
+        max-height: 500px;
+      }
+      .row-line {
+        display: flex !important;
+        flex-direction: row-reverse !important;
+      }
+      .row-line > div {
+        width: 50%;
+      }
+      .news_list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .news_list div > img {
+        width: 200px;
+        height: 230px;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark"
+  >
+    <div class="min-h-screen flex flex-col">
+      <header
+        class="sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-border-light dark:border-border-dark"
+      >
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+            <div class="flex items-center gap-4">
+              <h1
+                class="text-2xl font-bold text-foreground-light dark:text-foreground-dark font-serif"
+              >
+                KUKINEWS
+              </h1>
+            </div>
+            <nav class="hidden md:flex items-center gap-6">
+              <a
+                class="text-sm font-medium text-muted-foreground-light dark:text-muted-foreground-dark hover:text-brand transition-colors"
+                href="#"
+                >홈</a
+              >
+              <a class="text-sm font-medium text-brand dark:text-brand" href="#"
+                >희망 캠페인</a
+              >
+              <a
+                class="text-sm font-medium text-muted-foreground-light dark:text-muted-foreground-dark hover:text-brand transition-colors"
+                href="#"
+                >특징</a
+              >
+              <a
+                class="text-sm font-medium text-muted-foreground-light dark:text-muted-foreground-dark hover:text-brand transition-colors"
+                href="#"
+                >오피니언</a
+              >
+              <a
+                class="text-sm font-medium text-muted-foreground-light dark:text-muted-foreground-dark hover:text-brand transition-colors"
+                href="#"
+                >커뮤니티</a
+              >
+            </nav>
+            <div class="flex items-center gap-2">
+              <button
+                class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <svg
+                  class="text-foreground-light dark:text-foreground-dark"
+                  fill="currentColor"
+                  height="20"
+                  viewBox="0 0 256 256"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <svg
+                  class="text-foreground-light dark:text-foreground-dark"
+                  fill="currentColor"
+                  height="20"
+                  viewBox="0 0 256 256"
+                  width="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main class="flex-grow">
+        <div class="w-full text-center py-16 px-4 sm:px-6 lg:px-8">
+          <h2
+            class="text-4xl md:text-5xl font-bold text-foreground-light dark:text-foreground-dark leading-tight font-serif"
+          >
+            KUKINEWS 희망 캠페인
+          </h2>
+          <p
+            class="mt-4 text-lg text-muted-foreground-light dark:text-muted-foreground-dark max-w-3xl mx-auto"
+          >
+            쿠키뉴스의 서비스 저널리즘 프로젝트를 소개합니다.<br />
+            사회에 긍정적인 변화를 만들기 위한 다양한 협업 프로젝트를
+            만나보세요.
+          </p>
+        </div>
+        <section class="magazine-hero mb-16" id="main-project"></section>
+        <section class="container mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div class="story-shop-module p-6 md:p-8">
+            <h3
+              class="text-3xl md:text-4xl font-bold font-serif text-center mb-8 text-foreground-light dark:text-foreground-dark"
+            >
+              KUKINEWS × 성심당: 나눔의 이야기
+            </h3>
+            <div
+              class="relative w-full aspect-video mb-8 rounded-lg overflow-hidden shadow-lg"
+              style="height: 500px"
+            >
+              <img
+                alt="성심당 협업 이미지"
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdfdm9vALDQdRsmka1bznWrd4YSUrpyIcqo-dqpr8pvRIPms_bo_MRMlDI_QTmrBMYHofYwUMdw6DzI1Cb1AjkyztLcuLmnwsUSDhNvgqE0LsuMxEMI7nBdiyp1PteU8ioKwUtd2Qsyx01b0VUCizrCx2NEyJ1gjWdLulQ2cQl-n9W5qYkDNOPs7-iL5UAa2EFTRL5MIjwfnCG0_0r_7HTt8EuGXqH1_axKVgAjt9EFCtbcDKugMHW-6sqXjf-Tj2P09K-bvQ5C1c"
+              />
+              <div
+                class="absolute bottom-4 left-4 p-4 bg-black/60 text-white rounded-lg max-w-md"
+              >
+                <p class="text-lg md:text-xl font-semibold">
+                  대전의 명물 성심당과 함께 지역 사회의 따뜻한 이야기를
+                  전합니다.
+                </p>
+                <p class="text-sm mt-2">
+                  협업을 통해 제작된 특별 빵 판매 수익금의 일부는 지역 아동을
+                  위해 기부됩니다.
+                </p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 row-line">
+              <div>
+                <h4
+                  class="text-2xl font-bold font-serif mb-6 text-foreground-light dark:text-foreground-dark"
+                >
+                  성심당 제품 구매하기
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div class="product-card flex flex-col">
+                    <img
+                      alt="튀소구마"
+                      class="w-full h-32 object-cover"
+                      src="https://cdn.daejonilbo.com/news/photo/202008/1435895_319418_1447.jpg"
+                    />
+                    <div class="p-4 flex-grow">
+                      <h5 class="font-semibold text-lg mb-1">튀소구마</h5>
+                      <p
+                        class="text-muted-foreground-light dark:text-muted-foreground-dark text-sm line-clamp-2"
+                      >
+                        고구마 앙금이 가득한 성심당의 대표 튀김소보로.
+                      </p>
+                      <p class="text-brand font-bold mt-2">₩ 1,800</p>
+                    </div>
+                    <div
+                      class="p-4 border-t border-border-light dark:border-border-dark"
+                    >
+                      <button
+                        class="w-full bg-brand text-white py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                      >
+                        장바구니 담기
+                      </button>
+                    </div>
+                  </div>
+                  <div class="product-card flex flex-col">
+                    <img
+                      alt="부추빵"
+                      class="w-full h-32 object-cover"
+                      src="https://images.khan.co.kr/article/2017/02/05/l_2017020502000209200046681.jpg"
+                    />
+                    <div class="p-4 flex-grow">
+                      <h5 class="font-semibold text-lg mb-1">부추빵</h5>
+                      <p
+                        class="text-muted-foreground-light dark:text-muted-foreground-dark text-sm line-clamp-2"
+                      >
+                        부추와 계란이 어우러진 이색적인 빵.
+                      </p>
+                      <p class="text-brand font-bold mt-2">₩ 2,000</p>
+                    </div>
+                    <div
+                      class="p-4 border-t border-border-light dark:border-border-dark"
+                    >
+                      <button
+                        class="w-full bg-brand text-white py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                      >
+                        장바구니 담기
+                      </button>
+                    </div>
+                  </div>
+                  <div class="product-card flex flex-col">
+                    <img
+                      alt="명란바게트"
+                      class="w-full h-32 object-cover"
+                      src="https://blog.kakaocdn.net/dna/cbUKTx/btsMuhHu0UJ/AAAAAAAAAAAAAAAAAAAAADmth9LaDOgtEea7PVAq7pXs3UAGGMQHdRY6G2A9qS0U/img.jpg?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1761922799&allow_ip=&allow_referer=&signature=msunJS2F1dr8WJVhNvR7uU8prgk%3D"
+                    />
+                    <div class="p-4 flex-grow">
+                      <h5 class="font-semibold text-lg mb-1">명란바게트</h5>
+                      <p
+                        class="text-muted-foreground-light dark:text-muted-foreground-dark text-sm line-clamp-2"
+                      >
+                        짭조름한 명란이 들어간 바삭한 바게트.
+                      </p>
+                      <p class="text-brand font-bold mt-2">₩ 3,500</p>
+                    </div>
+                    <div
+                      class="p-4 border-t border-border-light dark:border-border-dark"
+                    >
+                      <button
+                        class="w-full bg-brand text-white py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                      >
+                        장바구니 담기
+                      </button>
+                    </div>
+                  </div>
+                  <div class="product-card flex flex-col">
+                    <img
+                      alt="순수마들렌"
+                      class="w-full h-32 object-cover"
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1O8QVEw7VJtOZuZRU8T5iJOOCCpvd4RuvBg&s"
+                    />
+                    <div class="p-4 flex-grow">
+                      <h5 class="font-semibold text-lg mb-1">순수마들렌</h5>
+                      <p
+                        class="text-muted-foreground-light dark:text-muted-foreground-dark text-sm line-clamp-2"
+                      >
+                        짭조름한 명란이 들어간 바삭한 바게트.
+                      </p>
+                      <p class="text-brand font-bold mt-2">₩ 3,500</p>
+                    </div>
+                    <div
+                      class="p-4 border-t border-border-light dark:border-border-dark"
+                    >
+                      <button
+                        class="w-full bg-brand text-white py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                      >
+                        장바구니 담기
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <a
+                  class="block text-center mt-6 text-brand hover:underline font-medium"
+                  href="#"
+                  >성심당 온라인몰 바로가기 →</a
+                >
+              </div>
+              <div>
+                <h4
+                  class="text-2xl font-bold font-serif mb-6 text-foreground-light dark:text-foreground-dark"
+                >
+                  쿠키뉴스 기사 보기
+                </h4>
+                <div class="news_list">
+                  <div
+                    class="border border-border-light dark:border-border-dark rounded-lg p-4 flex flex-row gap-4 bg-card-light dark:bg-card-dark shadow-sm"
+                  >
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKdnhY7oVE8Xc_c_1RhLDTcfCOoWDlxr6B1Q&s"
+                      alt=""
+                    />
+                    <div
+                      style="display: flex; flex-direction: column; gap: 0.5rem"
+                    >
+                      <h5
+                        class="font-bold text-xl text-foreground-light dark:text-foreground-dark"
+                      >
+                        "따뜻한 나눔" 쿠키뉴스-성심당, 지역 아동 돕기 협업 성료
+                      </h5>
+                      <p
+                        class="text-muted-foreground-light dark:text-muted-foreground-dark text-sm"
+                      >
+                        2024년 5월 15일
+                      </p>
+                      <div
+                        class="news-article-snippet text-base leading-relaxed text-foreground-light dark:text-foreground-dark"
+                        id="news-article-content"
+                        style="max-height: none"
+                      >
+                        <p>
+                          쿠키뉴스가 대전의 명물 성심당과 손잡고 진행한 '희망
+                          나눔 캠페인'이 성황리에 막을 내렸습니다. 이번 캠페인은
+                          성심당의 특별 한정판 빵 판매 수익금의 일부를 지역
+                          소외계층 아동을 위해 기부하는 방식으로 진행되었으며,
+                          많은 시민들의 참여를 이끌어냈습니다.
+                        </p>
+                      </div>
+                      <button
+                        class="self-start text-brand hover:underline font-medium mt-2"
+                        id="toggle-news-article"
+                        style="text-align: right; width: 100%"
+                      >
+                        기사 전문 보기
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="border border-border-light dark:border-border-dark rounded-lg p-4 flex flex-row gap-4 bg-card-light dark:bg-card-dark shadow-sm"
+                  >
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9RhRIectw5Ux4vJLwEqMlQG3qNqwCKKq2AQ&s"
+                      alt=""
+                    />
+                    <div
+                      style="display: flex; flex-direction: column; gap: 0.5rem"
+                    >
+                      <h5
+                        class="font-bold text-xl text-foreground-light dark:text-foreground-dark"
+                      >
+                        "따뜻한 나눔" 쿠키뉴스-성심당, 지역 아동 돕기 협업 성료
+                      </h5>
+                      <p
+                        class="text-muted-foreground-light dark:text-muted-foreground-dark text-sm"
+                      >
+                        2024년 5월 15일
+                      </p>
+                      <div
+                        class="news-article-snippet text-base leading-relaxed text-foreground-light dark:text-foreground-dark"
+                        id="news-article-content"
+                        style="max-height: none"
+                      >
+                        <p>
+                          쿠키뉴스가 대전의 명물 성심당과 손잡고 진행한 '희망
+                          나눔 캠페인'이 성황리에 막을 내렸습니다. 이번 캠페인은
+                          성심당의 특별 한정판 빵 판매 수익금의 일부를 지역
+                          소외계층 아동을 위해 기부하는 방식으로 진행되었으며,
+                          많은 시민들의 참여를 이끌어냈습니다.
+                        </p>
+                      </div>
+                      <button
+                        class="self-start text-brand hover:underline font-medium mt-2"
+                        id="toggle-news-article"
+                        style="text-align: right; width: 100%"
+                      >
+                        기사 전문 보기
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="border border-border-light dark:border-border-dark rounded-lg p-4 flex flex-row gap-4 bg-card-light dark:bg-card-dark shadow-sm"
+                  >
+                    <img
+                      src="https://cdn.daejonilbo.com/news/photo/202405/2129298_554762_0105.jpg"
+                      alt=""
+                    />
+                    <div
+                      style="display: flex; flex-direction: column; gap: 0.5rem"
+                    >
+                      <h5
+                        class="font-bold text-xl text-foreground-light dark:text-foreground-dark"
+                      >
+                        "따뜻한 나눔" 쿠키뉴스-성심당, 지역 아동 돕기 협업 성료
+                      </h5>
+                      <p
+                        class="text-muted-foreground-light dark:text-muted-foreground-dark text-sm"
+                      >
+                        2024년 5월 15일
+                      </p>
+                      <div
+                        class="news-article-snippet text-base leading-relaxed text-foreground-light dark:text-foreground-dark"
+                        id="news-article-content"
+                        style="max-height: none"
+                      >
+                        <p>
+                          쿠키뉴스가 대전의 명물 성심당과 손잡고 진행한 '희망
+                          나눔 캠페인'이 성황리에 막을 내렸습니다. 이번 캠페인은
+                          성심당의 특별 한정판 빵 판매 수익금의 일부를 지역
+                          소외계층 아동을 위해 기부하는 방식으로 진행되었으며,
+                          많은 시민들의 참여를 이끌어냈습니다.
+                        </p>
+                      </div>
+                      <button
+                        class="self-start text-brand hover:underline font-medium mt-2"
+                        id="toggle-news-article"
+                        style="text-align: right; width: 100%"
+                      >
+                        기사 전문 보기
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <h3
+            class="text-2xl font-bold text-foreground-light dark:text-foreground-dark font-serif mb-6 text-center"
+          >
+            Upcoming Projects
+          </h3>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+            id="project-carousel"
+          ></div>
+        </section>
+      </main>
+      <footer
+        class="bg-background-light dark:bg-background-dark border-t border-border-light dark:border-border-dark mt-16"
+      >
+        <div
+          class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-muted-foreground-light dark:text-muted-foreground-dark"
+        >
+          <p>© 2024 KUKINEWS. All Rights Reserved.</p>
+        </div>
+      </footer>
+    </div>
+    <script>
+      const projects = [
+        {
+          id: 0,
+          image:
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuCdfdm9vALDQdRsmka1bznWrd4YSUrpyIcqo-dqpr8pvRIPms_bo_MRMlDI_QTmrBMYHofYwUMdw6DzI1Cb1AjkyztLcuLmnwsUSDhNvgqE0LsuMxEMI7nBdiyp1PteU8ioKwUtd2Qsyx01b0VUCizrCx2NEyJ1gjWdLulQ2cQl-n9W5qYkDNOPs7-iL5UAa2EFTRL5MIjwfnCG0_0r_7HTt8EuGXqH1_axKVgAjt9EFCtbcDKugMHW-6sqXjf-Tj2P09K-bvQ5C1c",
+          title: "쿠키뉴스 × 성심당",
+          description:
+            "대전의 명물 성심당과 함께 지역 사회의 따뜻한 이야기를 전합니다.<br> 협업을 통해 제작된 특별 빵 판매 수익금의 일부는 지역 아동을 위해 기부됩니다.",
+          links: [
+            { text: "쿠키뉴스 기사 보기", href: "#" },
+            { text: "성심당 제품 구매하기", href: "#" },
+          ],
+        },
+        {
+          id: 1,
+          image:
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuAAy1psPpeV7bGsYdBfwJ49yMMchnAPL1EK-oGEpHMuV-GpawGJ1eJ7W7SheZAxGgAiOIvAGAH_2Yv8gLWpyxjw-RQWBuME8_zOtpTzpME_ZNRIucURoDfE-6FOo_5YL-BR0r4buMvALCVipGHs_TdWr3k5x66WAflsI__tFF3ZQIl__wyHPmnxxUVfZ8z5jEJ-D6mOlFyuYqtmrXb7GKQuA8tXQZ_AqKAzUgrOmUJvf8jyRVlpS3x4xpkt7312D58WwuebRGmShng",
+          title: "쿠키뉴스 × 매일유업",
+          description:
+            "매일유업과 함께 어르신들의 건강한 노년을 응원합니다. '소화가 잘되는 우유' 캠페인을 통해 영양 정보 제공 및 제품 기부를 진행합니다.",
+          links: [
+            { text: "쿠키뉴스 기사 보기", href: "#" },
+            { text: "캠페인 참여하기", href: "#" },
+          ],
+        },
+        {
+          id: 2,
+          image:
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuANtseNT0stzgyNpWjmsWPezGW-jVGhIMdV-6rKIDNTzGQjcjSTivHFqnIfdUulhTAQYJdXoiRALMiCdQqT32AvPbYnDs3A0mc7lGo2Nxg5DOPQPTFjUMVwbvPa4Dl9odk4uOtjwOQOT0HHbQNYkkoZ2bYImzMCVaqSaeS7gJ1DzA_XeL41YwOpbwHfr9v_zp6J28k20a2RKp9pRgyBzyc5HmvG7BL6DMEB2LUOCeObxW6TUfSF2aVKwFbqfxcgno8amaZcyou186s",
+          title: "쿠키뉴스 × Tech for Good",
+          description:
+            "기술로 사회 문제를 해결하는 스타트업을 조명합니다. 이들의 혁신적인 솔루션을 알리고, 투자 유치 및 성장을 지원하는 펀딩에 참여할 수 있습니다.",
+          links: [
+            { text: "쿠키뉴스 기사 보기", href: "#" },
+            { text: "프로젝트 후원하기", href: "#" },
+          ],
+        },
+        {
+          id: 3,
+          image:
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuAtZwOo4QUy3e0VBKC0gGWyaGPVzp0pIF6wemOzRrybRnkp38EV51Iqkm3QwxLf5WZfHcDIyjGU_K43VnVolq-QHn_71jbjhzmKYiw-OhoNxaiPPST_UZSWwNt8uZBS4I1i_md3ON5Nwlv1Jnhw91JvLpVMqSwKg0U16B-_-SmRCHq44iEwtFyEsy21I82gW55Q1rcKmiBTOjXqUSj2drrbENGuCBlecWvO2UPU8V5CG-C2zyGyVqqKYL9aT2ibQinShXEnd_TNR9w",
+          title: "쿠키뉴스 × 지속가능 패션",
+          description:
+            "친환경 소재를 사용하는 패션 브랜드와 함께 '의식있는 소비' 문화를 만들어갑니다. 업사이클링 제품 제작 워크숍 참여 기회를 제공합니다.",
+          links: [
+            { text: "쿠키뉴스 기사 보기", href: "#" },
+            { text: "워크숍 신청하기", href: "#" },
+          ],
+        },
+        {
+          id: 4,
+          image:
+            "https://lh3.googleusercontent.com/aida-public/AB6AXuAUbGIhxOiSB030XHj9kF_H4BMy_ZjtMeH780qzb0Vn5DHcy4I9BtBVItc_oBIK4RGVCefqNE7EAsQizBKs62fVrVHjJSYKUdTB3StllQ2R3_82PBl_vLmLAv8YDJhz8rVcb9LlYgr6YLuFlzaaLTnvhtJn5VHRjVXoKRsV89bjnt1-0T8HacesG5y79LvH9d9WTPkk5KlTCvTozA4RrRAyWVlU5kJu0DUI8kKj4e3a3NvfojOE30-WsMrVV500Hd-MFOH-fZ168_I",
+          title: "쿠키뉴스 × 그린 모빌리티",
+          description:
+            "전기차, 자전거 등 친환경 이동수단의 확산을 위해 노력합니다. 관련 정책과 기술을 소개하고, 공유 자전거 이용권 증정 이벤트를 진행합니다.",
+          links: [
+            { text: "쿠키뉴스 기사 보기", href: "#" },
+            { text: "이벤트 참여하기", href: "#" },
+          ],
+        },
+      ];
+      const mainProjectContainer = document.getElementById("main-project");
+      const carousel = document.getElementById("project-carousel");
+      let activeProject = 0; // Index of the currently displayed project
+      function updateMainProject(projectId) {
+        const project = projects[projectId];
+        mainProjectContainer.style.backgroundImage = `url("${project.image}")`;
+        mainProjectContainer.innerHTML = `
+            <div class="magazine-overlay">
+                <h3 class="text-4xl md:text-5xl font-bold font-serif mb-6">${
+                  project.title
+                }</h3>
+                <p class="text-lg md:text-xl leading-relaxed mb-8 max-w-2xl mx-auto">${
+                  project.description
+                }</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    ${project.links
+                      .map(
+                        (link) => `
+                        <a class="bg-brand text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg" href="${link.href}">
+                            ${link.text}
+                        </a>
+                    `
+                      )
+                      .join("")}
+                </div>
+            </div>
+        `;
+        activeProject = projectId;
+        updateThumbnailState();
+      }
+      function renderThumbnails() {
+        carousel.innerHTML = projects
+          .map(
+            (project, index) => `
+            <a class="editorial-snippet" href="#" data-project-id="${index}">
+                <img src="${project.image}" alt="${project.title}"/>
+                <div class="editorial-snippet-content">
+                    <h4 class="text-base font-semibold font-serif truncate">${project.title}</h4>
+                    <p class="text-sm text-muted-foreground-light dark:text-muted-foreground-dark mt-1 line-clamp-2">${project.description}</p>
+                    <span class="text-sm font-medium text-brand hover:underline mt-2 inline-block">더 보기 →</span>
+                </div>
+            </a>
+        `
+          )
+          .join("");
+        addThumbnailClickListeners();
+      }
+      function addThumbnailClickListeners() {
+        document.querySelectorAll(".editorial-snippet").forEach((thumbnail) => {
+          thumbnail.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            const projectId = parseInt(thumbnail.dataset.projectId);
+            updateMainProject(projectId);
+          });
+        });
+      }
+      function updateThumbnailState() {
+        document.querySelectorAll(".editorial-snippet").forEach((thumbnail) => {
+          if (parseInt(thumbnail.dataset.projectId) === activeProject) {
+            thumbnail.classList.add(
+              "ring-4",
+              "ring-brand",
+              "ring-offset-2",
+              "dark:ring-offset-background-dark"
+            );
+          } else {
+            thumbnail.classList.remove(
+              "ring-4",
+              "ring-brand",
+              "ring-offset-2",
+              "dark:ring-offset-background-dark"
+            );
+          }
+        });
+      }
+      // Toggle news article snippet
+      const toggleNewsArticleBtn = document.getElementById(
+        "toggle-news-article"
+      );
+      const newsArticleContent = document.getElementById(
+        "news-article-content"
+      );
+      if (toggleNewsArticleBtn && newsArticleContent) {
+        toggleNewsArticleBtn.addEventListener("click", () => {
+          newsArticleContent.classList.toggle("expanded");
+          if (newsArticleContent.classList.contains("expanded")) {
+            toggleNewsArticleBtn.textContent = "기사 간략히 보기";
+          } else {
+            toggleNewsArticleBtn.textContent = "기사 전문 보기";
+          }
+        });
+      }
+      // Initialize with the first project and render thumbnails
+      updateMainProject(0);
+      renderThumbnails();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Newsroom Feed</title>
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1193d4",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101c22",
+            },
+            fontFamily: {
+              display: ["Newsreader"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 4px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 20px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-[#101c22] dark:text-background-light"
+  >
+    <div class="flex flex-col min-h-screen">
+      <header
+        class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-black/10 dark:border-white/10"
+      >
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+            <div class="flex items-center gap-8">
+              <a class="flex items-center gap-2 text-xl font-bold" href="#">
+                <span class="material-symbols-outlined text-primary text-3xl"
+                  >newspaper</span
+                >
+                <span>Newsroom</span>
+              </a>
+              <nav class="hidden md:flex items-center gap-6">
+                <a
+                  class="text-sm font-medium hover:text-primary transition-colors"
+                  href="#"
+                  >Top</a
+                >
+                <a
+                  class="text-sm font-medium hover:text-primary transition-colors"
+                  href="#"
+                  >Politics</a
+                >
+                <a
+                  class="text-sm font-medium hover:text-primary transition-colors"
+                  href="#"
+                  >Economy</a
+                >
+                <a
+                  class="text-sm font-medium hover:text-primary transition-colors"
+                  href="#"
+                  >Society</a
+                >
+                <a
+                  class="text-sm font-medium hover:text-primary transition-colors"
+                  href="#"
+                  >World</a
+                >
+                <a
+                  class="text-sm font-medium hover:text-primary transition-colors"
+                  href="#"
+                  >IT/Science</a
+                >
+              </nav>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="relative hidden sm:block">
+                <span
+                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-black/40 dark:text-white/40"
+                  >search</span
+                >
+                <input
+                  class="pl-10 pr-4 py-2 w-48 bg-black/5 dark:bg-white/5 rounded-full border-transparent focus:ring-primary focus:border-primary"
+                  placeholder="Search"
+                  type="text"
+                />
+              </div>
+              <button
+                class="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+              >
+                <span class="material-symbols-outlined">notifications</span>
+              </button>
+              <div
+                class="size-10 rounded-full bg-cover bg-center"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBq_o9-cblrU6K_vze79KbuL2dI-ghti28biSXpk4XJufIQaVcDcUglI2rmYrb_4qGpsWdVwrTe7SNk36ATOIvZExl7NFt_CrzzCOipwuqwCZM6pj5CVn_q-Q8TE6Opz9RMaVwlPbtRwfofYGvWubCzhssh_rn4uIkCmvnBvdlyDZpY_XUULtrqq2swFnUM2DUDv7r1podkam76OIBonaHtOAMxMy3ahkr1qvOv2jxmkbGVjhpy4lUroGo86ve16YXj5XIubqsv7YE');
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div class="lg:col-span-2">
+            <div class="mb-8">
+              <h1 class="text-4xl font-bold mb-4">Newsroom Feed</h1>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  class="px-4 py-1.5 text-sm font-medium rounded-full bg-primary text-white"
+                >
+                  All
+                </button>
+                <button
+                  class="px-4 py-1.5 text-sm font-medium rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                >
+                  Politics
+                </button>
+                <button
+                  class="px-4 py-1.5 text-sm font-medium rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                >
+                  Economy
+                </button>
+                <button
+                  class="px-4 py-1.5 text-sm font-medium rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                >
+                  Society
+                </button>
+                <button
+                  class="px-4 py-1.5 text-sm font-medium rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                >
+                  World
+                </button>
+                <button
+                  class="px-4 py-1.5 text-sm font-medium rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                >
+                  IT/Science
+                </button>
+              </div>
+            </div>
+            <div class="space-y-8">
+              <div
+                class="bg-background-light dark:bg-background-dark border border-black/10 dark:border-white/10 rounded-xl overflow-hidden shadow-sm"
+              >
+                <div class="p-4">
+                  <div class="flex items-center gap-3 mb-4">
+                    <img
+                      alt="Sarah Lee"
+                      class="size-12 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq_o9-cblrU6K_vze79KbuL2dI-ghti28biSXpk4XJufIQaVcDcUglI2rmYrb_4qGpsWdVwrTe7SNk36ATOIvZExl7NFt_CrzzCOipwuqwCZM6pj5CVn_q-Q8TE6Opz9RMaVwlPbtRwfofYGvWubCzhssh_rn4uIkCmvnBvdlyDZpY_XUULtrqq2swFnUM2DUDv7r1podkam76OIBonaHtOAMxMy3ahkr1qvOv2jxmkbGVjhpy4lUroGo86ve16YXj5XIubqsv7YE"
+                    />
+                    <div>
+                      <p class="font-bold">Sarah Lee</p>
+                      <p class="text-sm text-black/60 dark:text-white/60">
+                        Political Desk · 2 hours ago
+                      </p>
+                    </div>
+                  </div>
+                  <p class="mb-4 text-black/80 dark:text-white/80">
+                    As a journalist, my mission is to bring you the stories that
+                    matter most. Today, I want to share some insights into the
+                    process of uncovering the truth behind the headlines. It's
+                    not always easy, but it's always worth it.
+                  </p>
+                </div>
+                <a class="block group" href="#">
+                  <div
+                    class="bg-cover bg-center aspect-video"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAr0qc-ZzrqC5I--wEjeXUEaADETXkjaLRosKJsMFuAKlF7ihqvEQYK013r_msMvE_GsE__CoVwDTdFT2XhdKxhQ40Qm1fxOX2yRMJ9eEJR2gSsPBF5gKfok1l0_XW0UjrG4Kgc09Ho0kYwtPHryaSRuVblxnozM4dCOzydVstvWpK4JLlwaMYHNVPDqhC6cCEwbSJPatzma0LEpKmNuMxB0dh0qDfTk_73HUMIgDYM41P_flQF51Q5DDLgn8NESbsY0PVF96vi54I');
+                    "
+                  ></div>
+                  <div class="p-4 bg-black/5 dark:bg-white/5">
+                    <h3
+                      class="font-bold text-lg group-hover:text-primary transition-colors"
+                    >
+                      Behind the Scenes: Uncovering the Truth
+                    </h3>
+                  </div>
+                </a>
+                <div class="flex items-center justify-start gap-4 p-2">
+                  <button
+                    class="flex items-center gap-1.5 text-black/60 dark:text-white/60 hover:text-primary dark:hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
+                  >
+                    <span class="material-symbols-outlined">favorite</span>
+                    <span class="text-sm font-medium">23</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-1.5 text-black/60 dark:text-white/60 hover:text-primary dark:hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
+                  >
+                    <span class="material-symbols-outlined">share</span>
+                    <span class="text-sm font-medium">Share</span>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="bg-background-light dark:bg-background-dark border border-black/10 dark:border-white/10 rounded-xl overflow-hidden shadow-sm"
+              >
+                <div class="p-4">
+                  <div class="flex items-center gap-3 mb-4">
+                    <img
+                      alt="David Kim"
+                      class="size-12 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZBd6o-S03hToJItcbTLLu5i60BPz_aZrFli2u6Ido-CtRANYWwi8rROKUg8LnOZNxQeD2e--SbNjuF977Yczb-TD5RqtSaCXXM9XHpTcD5r84r41jLbZMJWA8azRvEwsl2KQFapGCAX2INkYA_k2cXEpAy_QBs1cB2kjYk4kKQIcbBIxjJWDfeOuYV30LwrLEPabPCXu5sEEnzyDitrCeRwDK1ypaFWRrca2S6ws873FM84PYeiZHA7lgDDg_cjeUc44GZwHzwEA"
+                    />
+                    <div>
+                      <p class="font-bold">David Kim</p>
+                      <p class="text-sm text-black/60 dark:text-white/60">
+                        Society Desk · 5 hours ago
+                      </p>
+                    </div>
+                  </div>
+                  <p class="mb-4 text-black/80 dark:text-white/80">
+                    Local elections play a crucial role in shaping our
+                    communities. From school board members to city councilors,
+                    these elected officials make decisions that directly affect
+                    our daily lives. It's essential to stay informed and
+                    participate in the democratic process.
+                  </p>
+                </div>
+                <a class="block group" href="#">
+                  <div
+                    class="bg-cover bg-center aspect-video"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBwSliZ96AnskREtdhi9KgeA-I2HtWNKv9BTdaA00e353Z_0am6FhA9WumskiDqLKPloelhE8wA-09uJZduV58iwbcFo2BOQmmDjCXwKcBbYlc9xkoLBRi-fcnpFSIFJBOtzFJbMUatF_aaBbK_F13c-LUy-VQU_9SPd1ofeXl4GfkIH4L7uV-cgEQ0VkAl29NoRwXIip-8V2cH_y1YJh6YkzgKix2YIL0UyiPijFIO-_gGxK28pJVOUidzzH21u-ZHXG8gJrkCS7w');
+                    "
+                  ></div>
+                  <div class="p-4 bg-black/5 dark:bg-white/5">
+                    <h3
+                      class="font-bold text-lg group-hover:text-primary transition-colors"
+                    >
+                      The Impact of Local Elections
+                    </h3>
+                  </div>
+                </a>
+                <div class="flex items-center justify-start gap-4 p-2">
+                  <button
+                    class="flex items-center gap-1.5 text-black/60 dark:text-white/60 hover:text-primary dark:hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
+                  >
+                    <span class="material-symbols-outlined">favorite</span>
+                    <span class="text-sm font-medium">18</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-1.5 text-black/60 dark:text-white/60 hover:text-primary dark:hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
+                  >
+                    <span class="material-symbols-outlined">share</span>
+                    <span class="text-sm font-medium">Share</span>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="bg-background-light dark:bg-background-dark border border-black/10 dark:border-white/10 rounded-xl overflow-hidden shadow-sm"
+              >
+                <div class="p-4">
+                  <div class="flex items-center gap-3 mb-4">
+                    <img
+                      alt="Emily Park"
+                      class="size-12 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuATskGaZFsVETOWHBMX6s4kST90FDNKU0mKfIg9-bZQBJqx0Oic5Ea_nuRZVASNs3wIoVbkjtPvwWlvdF9nyA2ZrdesBw91YXCmfiMPz2StglO-MnQQZDvTq7mvuvVehRvpxs_atJH168f1pFvoWC7w53I4txuBQo1MgIMbn1VbSopoQRKQDD6kCGCFByi4j0HeLilujwAF_hd1FIz1klfr-zL_QlO7JZbbgezKz8eiqTeomhmT3heH_QMNU7VcyHNzN4as7e9kkLw"
+                    />
+                    <div>
+                      <p class="font-bold">Emily Park</p>
+                      <p class="text-sm text-black/60 dark:text-white/60">
+                        IT/Science Desk · Yesterday
+                      </p>
+                    </div>
+                  </div>
+                  <p class="mb-4 text-black/80 dark:text-white/80">
+                    The transition to renewable energy sources is one of the
+                    most pressing issues of our time. From solar and wind power
+                    to hydroelectric and geothermal energy, there are many
+                    promising technologies that can help us reduce our carbon
+                    footprint and combat climate change.
+                  </p>
+                </div>
+                <a class="block group" href="#">
+                  <div
+                    class="bg-cover bg-center aspect-video"
+                    style="
+                      background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAr0qc-ZzrqC5I--wEjeXUEaADETXkjaLRosKJsMFuAKlF7ihqvEQYK013r_msMvE_GsE__CoVwDTdFT2XhdKxhQ40Qm1fxOX2yRMJ9eEJR2gSsPBF5gKfok1l0_XW0UjrG4Kgc09Ho0kYwtPHryaSRuVblxnozM4dCOzydVstvWpK4JLlwaMYHNVPDqhC6cCEwbSJPatzma0LEpKmNuMxB0dh0qDfTk_73HUMIgDYM41P_flQF51Q5DDLgn8NESbsY0PVF96vi54I');
+                    "
+                  ></div>
+                  <div class="p-4 bg-black/5 dark:bg-white/5">
+                    <h3
+                      class="font-bold text-lg group-hover:text-primary transition-colors"
+                    >
+                      The Future of Renewable Energy
+                    </h3>
+                  </div>
+                </a>
+                <div class="flex items-center justify-start gap-4 p-2">
+                  <button
+                    class="flex items-center gap-1.5 text-black/60 dark:text-white/60 hover:text-primary dark:hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
+                  >
+                    <span class="material-symbols-outlined">favorite</span>
+                    <span class="text-sm font-medium">32</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-1.5 text-black/60 dark:text-white/60 hover:text-primary dark:hover:text-primary transition-colors px-2 py-1 rounded-lg hover:bg-primary/10"
+                  >
+                    <span class="material-symbols-outlined">share</span>
+                    <span class="text-sm font-medium">Share</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <aside class="hidden lg:block sticky top-24 self-start">
+            <div
+              class="bg-background-light dark:bg-background-dark border border-black/10 dark:border-white/10 rounded-xl shadow-sm p-4"
+            >
+              <h3 class="text-lg font-bold mb-4">Journalists</h3>
+              <div class="max-h-[600px] overflow-y-auto pr-2 scrollbar-thin">
+                <div class="space-y-4">
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Sarah Lee"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq_o9-cblrU6K_vze79KbuL2dI-ghti28biSXpk4XJufIQaVcDcUglI2rmYrb_4qGpsWdVwrTe7SNk36ATOIvZExl7NFt_CrzzCOipwuqwCZM6pj5CVn_q-Q8TE6Opz9RMaVwlPbtRwfofYGvWubCzhssh_rn4uIkCmvnBvdlyDZpY_XUULtrqq2swFnUM2DUDv7r1podkam76OIBonaHtOAMxMy3ahkr1qvOv2jxmkbGVjhpy4lUroGo86ve16YXj5XIubqsv7YE"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Sarah Lee</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="David Kim"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZBd6o-S03hToJItcbTLLu5i60BPz_aZrFli2u6Ido-CtRANYWwi8rROKUg8LnOZNxQeD2e--SbNjuF977Yczb-TD5RqtSaCXXM9XHpTcD5r84r41jLbZMJWA8azRvEwsl2KQFapGCAX2INkYA_k2cXEpAy_QBs1cB2kjYk4kKQIcbBIxjJWDfeOuYV30LwrLEPabPCXu5sEEnzyDitrCeRwDK1ypaFWRrca2S6ws873FM84PYeiZHA7lgDDg_cjeUc44GZwHzwEA"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >David Kim</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Emily Park"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuATskGaZFsVETOWHBMX6s4kST90FDNKU0mKfIg9-bZQBJqx0Oic5Ea_nuRZVASNs3wIoVbkjtPvwWlvdF9nyA2ZrdesBw91YXCmfiMPz2StglO-MnQQZDvTq7mvuvVehRvpxs_atJH168f1pFvoWC7w53I4txuBQo1MgIMbn1VbSopoQRKQDD6kCGCFByi4j0HeLilujwAF_hd1FIz1klfr-zL_QlO7JZbbgezKz8eiqTeomhmT3heH_QMNU7VcyHNzN4as7e9kkLw"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Emily Park</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Michael Chen"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq_o9-cblrU6K_vze79KbuL2dI-ghti28biSXpk4XJufIQaVcDcUglI2rmYrb_4qGpsWdVwrTe7SNk36ATOIvZExl7NFt_CrzzCOipwuqwCZM6pj5CVn_q-Q8TE6Opz9RMaVwlPbtRwfofYGvWubCzhssh_rn4uIkCmvnBvdlyDZpY_XUULtrqq2swFnUM2DUDv7r1podkam76OIBonaHtOAMxMy3ahkr1qvOv2jxmkbGVjhpy4lUroGo86ve16YXj5XIubqsv7YE"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Michael Chen</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Jessica Rodriguez"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQVhuALwp-O4G-De9smVIQC2e67rbxEowYuMoM_38C09hb4_wWxQNpnfrbSbKI78l1gbuDJCiHKtMqvhsCs7ONMHB3LZsfFtwxVSQhasn2OfqEy5YHWBA-srl_Lbw6AM412dCI12qAnRoH5WwdiM7cU_kLveDIsa8cuIztrPIQEep22yVlzJDs7Vi9D6dlRKvGEzOn7xBuK44DvNGeemLEfzM8BZd7Y1AjltbanwB_dAwL3nYd05lR9lFGdgDIOPpQ-QS8yWD7gdM"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Jessica Rodriguez</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Chris Evans"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWL7c1bB6wGEAST7Y4XStDXMpdaEB4PFjoVN5Eox4qvbIxs0WLHxTMgDEibTVaOo00LWT9WpmqvJV4g8EewprRsWXq0wCYIznJjnCADYX_nhJOKZjXJFZT73HsVWeaBsyXeROEDcmStHz9220B-HR_ppRDUkrUWSMqO1r7c_r7bsvozWCzmwSywYnallvPupIPLm05b9r11f-gm762n2XKtfE3rgEX194ONheR-8YDw5VanYpoZG34S8OeXvNUNrVzlmmMtj_lFZo"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Chris Evans</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Laura Martinez"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi7isFHsgiGTV-ZH6SXy_QSvBDZ7k_aqw3NktF7-HB73B7w7JsK0yf0x4c4R4e_Zodvs3kb_2hPx5uo27VF5v3F8EIIWxhdhSCFszqW6dRkwhaU7f0oAb9YntgXkZwNZrqSmNHVXb5x4ZUiqR5zlR9UmhiDQU0_0wZfVif3uSN-dJSvUBL50QzUtEauzBPI55dgShn7ZMUFo5eK_0e6RrNpnitxoymTfjS2BSM3WR3o9Xl6SbBvg_oGAYarJtMYrtX0uJ1kpctn3M"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Laura Martinez</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Brian Wilson"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4s5ezvvn24LX5mBJbq7K6SbuzPkNdLI3nznRGDALZwkciCalJN_BRcYhPhmX0zQJjomRTts4l8Ga3g7H6D0s7wZv9kzrsMP2HO-l9ml0QbEkSAIeHhONCAC0ZvKFNm7BMOXLvdsuI-wTETxCdDVgEIAZmvvyzJt7vIlW2Tcm9z8NDRuQ9UlrAzOKP0VVMGWfE45sWmwUTF_cX2hPtL5lGPhvBHEWLzkpXY3e6F4-I9WIpM-llkv8-Pe8lhZgzXdbd8sIxCXxSn0g"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Brian Wilson</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Amanda Taylor"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDqUqmo6N1SthZGz3H5SukxZgRjRMW8Gd1tk30JegvHRny5plF-2yKcoETwqlYlBv_OCTVEewGz-HZ36Zq39uwX5EzRkWCWt_iAhrUu33yfoN0EFtrknB9VU8dihA0ZwMt1qaYjymlxLZob-Au8E-R4i-5kYjuHLjWvQ-cKHnaXngKWJ-nK36oSn-BBJdDB91qpPmMMu5VwDLSwJH2NzpxqqdCpdAmvNkemUR1qGC0AEmqUrX7Yikp5GQ2oIIwVDKUIv9aQ4-ghuw"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Amanda Taylor</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Kevin Harris"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdpEUaktiPloSHBhqCoeuH3lBUZEG52bx1lKwOvyrrwlAwONBXGW9e4bNOur_BlFAD3eT6ohxrjF7u0xaTbhEOPEf0pOnMidzb42lNuhm3ut80M9ZIwlaY-KRv1J0cv3m33987E58MIQbsjkzyglJNHu4yE1cH8_4N5xdyqdc8GM2V_WupUpzaZlsG7gLRr8JcMARSj2bx4VQMdeVcALzwhd6UaOBkKePtrq8EinATWzQjXL2ShWgeya6zZ6FBsm-gYO7zbj3mWC4"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Kevin Harris</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Chloe Green"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWL7c1bB6wGEAST7Y4XStDXMpdaEB4PFjoVN5Eox4qvbIxs0WLHxTMgDEibTVaOo00LWT9WpmqvJV4g8EewprRsWXq0wCYIznJjnCADYX_nhJOKZjXJFZT73HsVWeaBsyXeROEDcmStHz9220B-HR_ppRDUkrUWSMqO1r7c_r7bsvozWCzmwSywYnallvPupIPLm05b9r11f-gm762n2XKtfE3rgEX194ONheR-8YDw5VanYpoZG34S8OeXvNUNrVzlmmMtj_lFZo"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Chloe Green</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Jason White"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX1Awn4GXEtZyw8vDUMgv0DamQ42ZNxhdWIVVjGYJiVz_2F1_IbMXpqG2pzvWPbi73_n0BEkHdyI5hswV8DrdY5JiGlaxKXpJnYu0CGHc5i4MYtQxlWAUA8p70claysr1TYXDqG2u4CNhmLkoR2sorXyc1fCgcib2dS6kgennlkiob91-Lve9pucuv3beKEd5ImawGsz9PLOR7W9braUEcZ3OIRXl6bGxumdWMbxmOpX4i3uZ96ItSKgk0mt_u_CKmzsq8aiwP5vY"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Jason White</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Megan Walker"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwTVDKl9YcDosY9rzZOLGGU8617UtUv2fQrdzB8I5gbfkDyC-1Pz62n0SUL-Z_NTeF9qA5lU5FjVCRqewVJRmYdL3yQWrWqixp57WvhMDVBUpSQSVJtiDqFRT6791z7lcTyPBYzo2Zz8jynq-iNEdqNIqpXf7IobdBsO49ukg5p9bcUaOn6DYAmN6odU88IZ-O2BSUqsEqWFAbPUBJx3KFU9q1MqqF7Rshw2g41x7T26ya9HaFvnli8S_5AwrrmT4bUtsAF4jlOWE"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Megan Walker</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Daniel Clark"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLApaM2oeOKtx03ZOUhBqUth_5ivRDMmf2qyO2jWYNaJXUYMaHFMWZhh45c3S3IIzaHTFzzry1CReDrUvxXSSTTYXP1xAG7NyujrtuHHJiMf9h0K6oKTtYTWv0bKIIj6Vb2SoCwxVXXoRjklcVlSMYjSIjFEpOHVKPAQY8ieHN3A-38y4SpuVMHMpC6pEZHOngKHaNzS00o6HaN_FFoPtWTLOdcyoJz4uZh-xRWel7h2djVs0seg2JYjj-j4BIFgm0TI3pC4g4myA"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Daniel Clark</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Olivia Lewis"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1DUXShRMl4zwAAQqIpPw3MHlU79XsWAsRrZfn1Q71GXKjxwwS6TTeNbGkY2rtwDQjC4QFCPRcYaM85kgQOs-oXws4h1Grmf2MSNYlnai515JKTtYmrLBWmkeYujLCfq4Hf1aZNaAB6Fmi3To4sjlccv9_OLkBxHbtWNKp0RGTaAKiSpzbv4xRTNVlWdUp-XEyVLsD60t9oHkun2JG2bzaRHct7w0PxY30aw7TMColnrjq6iTOQ6rotNb83Fjr-pLFFlenBo1q7yM"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Olivia Lewis</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Matthew Robinson"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuVX8GPGFTNFzDDN9cyrZeN9-4gqdTt64jC_UYT3wQaQsztiFzkR4LhJFWLWArj8nXkYuEfHfUGZW2djpl4BBXbmS2Z9ik3BeSj-tpcmjQ5IpQg0jwEG6Zg0gUfRKgdQClf7PQaNJ00YNoD7_A4er5qiJ2Y_7awqxNCbKIwvwXYJBilYw4hxH-2r38CCP5ETj1-pDQ_6FWYnFDGePhS-wVYxnu0OIMMrhfvL9RdIBBm9IcT4QZdXZYoOTMEkO07elMgyyCuVfbHSs"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Matthew Robinson</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Sophia Perez"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0MrXl73sPjmqs7D11wmr4ryErfbr_HFRvsArn9UVEXtWNNJLw3Wmy7JB-hdgyRZ2tvP7Ymg-UY65uMTqqblI4Ef-zpfHT2ffGZx9jGTiZRdMwxDGL0wr3xuhs1iVZ3obxMXWoqosgM5cjUxRyLhxh5bpo4LLwbjAO8qVuPKCn0_lmHCheV8UOKz6ou9yhDcDTBS9jJpeopP8-mrKtwislooDcqcPQ5aODVCcfmtKXjCHz0Z6FwkZHyk3T-503azKYiF7ue_cp4Pk"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Sophia Perez</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="James Allen"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiWBbVZizoxDBZ4WP5p12NXx_g7KubVBT-mbaLjbXccYdEh1xI6BL2eDnOuqUB-j197imryTaN2M5mQZ1ylHc2UuSiV2uI51zk_J9eaRtWZVxqw3sgtp-9QdQtNTjvAJfdDgVwn4lvs13Oy85eFuMaeLJIREjoGEtSpskZvs1RTiecLftfR4lCQn2TvNC4LHAlFsYByyz7AQ9CNb6W_Rn113zsbN_p0CUKLJ0cGR-zbSzy2dOrWK0S_V3Erc4VxW4Z9mdd_Y2T0QM"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >James Allen</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Isabella King"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcZc4TTv3JJ-9O8VGi0Nc92X-_hqg2XhwYN4CXzwzzUu6pS2P-hdaMPyth3SlQk_AOPLr2LGlpAXb0RbCQyOpJ5bJRsYZAXPOXPlw65jJLZ8iZ2f_nkeURuwkEp4VATR8pXOXm7fweE1oHlAFqUG7wAawuUP3d1znusQTRD41E9vt5dGrupCRdl5dr20z0FE-8BVuOVpM4EBZd1iWWVI6_eEJFLsfeLzw62ck5ZeVezzTR7bYWoKBNOjT8M4Sw8hp2YQAwJiXCNPc"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Isabella King</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="John Wright"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn_FRT8uG8vhjgCj5T23OuCQWqO34ikyRJ91wgwFrFox_Z2h3lMx7jQas4ug4diIzqi9pZoVq-BlJwE8UYMJQinQ_ShG6SKxCixn5s0J320Fqg2Q_IxRIVpzvFKamihPm-8lb63BLcSyvUWIHq7x6j3JZwFs2618SEaqM5Kpm12SRiXJJZOO0GKh8GHUE6g0NVB4m8EJYMGxvRsQYyMF0jbJMlBlDqxSmf2UCDFh8DS-d16FhzqoZROvKtXTbIwu8bw8cTrB30axM"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >John Wright</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Ava Scott"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWL7c1bB6wGEAST7Y4XStDXMpdaEB4PFjoVN5Eox4qvbIxs0WLHxTMgDEibTVaOo00LWT9WpmqvJV4g8EewprRsWXq0wCYIznJjnCADYX_nhJOKZjXJFZT73HsVWeaBsyXeROEDcmStHz9220B-HR_ppRDUkrUWSMqO1r7c_r7bsvozWCzmwSywYnallvPupIPLm05b9r11f-gm762n2XKtfE3rgEX194ONheR-8YDw5VanYpoZG34S8OeXvNUNrVzlmmMtj_lFZo"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Ava Scott</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Robert Green"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7SkYT4jJrjgPs3Pz_SsiqXB29N7D_cwWbpIwJN8ZRxCL7KwjbiWR1JPWpI-wK8mbcr99OTyDT25DQb4ykEJ00FIBTqptfbn7XLID792Bx-mF-bOQkhcKjwUgtEw96rDKmD5mSwMuIQqhFr5gAY2u02DXcefQ-Wx7UfbvM91d-Kl8XyacB8-uSKxlyvIb1LKVkTNjXdo3kfTr2iqNPIaheTHRUTkOnDThz-E4lT3RbrrxNtL2CnnH0DtclY9GtBmbO-SaTFaRUJN8"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Robert Green</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Mia Adams"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuebFcFbvD5Ut1zsw77s5NYyi0gK9pftlZKneoqZ5psk-3It1zm9HlgN5VIpgSebNEKbBJYGvv2d4vY1SzIujzjy_spqs7ySap5Nd8jp8rP3Gzwav1eEDn2i6_D3K8v-TAGqRM4CvUC-rlxzjAs9OISXa2akbtrsh2REv2HcLT5kyvMo9q-wApqXoKCK4ikGp0rBRFj0Coo3JH6yQcK4lMLJM5MBWTtj0x9EjisSvAHvMQJXv4B2DkOAxUS2tHliWogr0S6oMuwao"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Mia Adams</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Joseph Baker"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8jiqwdraCdcDkqHrCtKjcsWBssHx7kd3aeg18o7cQY0B1e-69MRd2ZRcf--Lh5ixM6G-fWiCP6WMhtb7bAFMhxvRJCkv4Y4jABHdahzkNkl3d9wJjtpRjRuLl3ZM1LhT130kGRI6ux_lvHLz9KMtuPJBG7dEWwkTBzWeSvDZhsAq93dPPBMDw0kNIIEsLDk_i9OS64BwMObHvomr6HKf4a_0hwJQigQ5R5C8BCZYzL_6X0lyArPpgBsh905Re9PFs2e3bM7LpyqQ"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Joseph Baker</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Evelyn Nelson"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgB6ciXjeBeaBehkwncthMrpMunlVEqSaeNo3ba6yPj3nOuVWvzoXhA-GZFrTNSraD1tuK8Oq8h5EFK897obBq9KqHDqDMu-YE3edjFkPNaODb062tBdwQosXJxvk_UWbpVZLvAm2E-yfYATIwfzMGpEqVvvKr9pBcRVqxgvQdPYQNJlboiJHY5HJT2eQqRtwO9t9VM1DwwkXgk-MvB9bXrNl9PuNmfLXP5m3Ngkmt3QO4sSuc8X53aAPvP7LlhWe4t5Y9F_uyuKM"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Evelyn Nelson</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Charles Carter"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxZykU6imrwtlc8BsH6rOhYR6La9pwhEPDppnmCIDt-zqhC-3p48JbVl_BmARVbjb8pGRFXpBS3zwPYKaAIpGl_qaA826KqxApU1YZr_RTbjg3wZbGHLXmEdrVPMrG35FzXXkc7VZ5FoElUkHAW63DmIicJt9EiAYD2_1JtpfqKXk9DhPWHMMO5yMb9KlgICtzxmrTM1ndPCvSWNkFwogC-6TpvVegBQZSlkmNnbtCWSUVnTzFSfj6r_84QONTsA-ZxzHNNQSk9x0"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Charles Carter</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Abigail Mitchell"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKNaZYj_q4vIkgs3PnpmMH72abOFq7L3GFOYiM-RU253SmHxCUQpF1nFb7oWZ3QIlk9QRzU2nVSqLzXsJVxtkssvgamXO-xO5Iz5MtfpEFx1eeC-tF9dZWkglnOAh3B3eVCGk-fqd8aCD6JWlei9YQAiaAPB90ImIAZrQd6hKbGLAjLOtoYZV9ChBzuQG8U8xXQAIe2iUO-lXSywcAmk50n6XLDFYomhksbl4--Is8nypKiwT1bcoMXkGYSAwJiXBPllWcMt9wHe4"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Abigail Mitchell</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Thomas Perez"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZNO_kknVPCBorH2_CW0V9OBU1INKoKrHd6aw8sZXvPbnVZL4RadX4H-jWxXDopvqeSrrV9dKYEPL6U8KxR6Gz4Y1fxX2RmgnkjfxeESdVVGQRfTI31UnNM-TfHVIaLVvZw1LbT4Wg2ktRZQrIjqSI8cylnK-gBvdNrdWw2TPZSXeW0k271_NHiL9ekQ2ZlzVgeEnanxTyE8oJI8NV4cDYSDS8_YxUAnYm8sw5dn-ZrtBX7EQp7HsXnl7ijy9Sie5QmQlOOi58AZY"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Thomas Perez</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Harper Roberts"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWL7c1bB6wGEAST7Y4XStDXMpdaEB4PFjoVN5Eox4qvbIxs0WLHxTMgDEibTVaOo00LWT9WpmqvJV4g8EewprRsWXq0wCYIznJjnCADYX_nhJOKZjXJFZT73HsVWeaBsyXeROEDcmStHz9220B-HR_ppRDUkrUWSMqO1r7c_r7bsvozWCzmwSywYnallvPupIPLm05b9r11f-gm762n2XKtfE3rgEX194ONheR-8YDw5VanYpoZG34S8OeXvNUNrVzlmmMtj_lFZo"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Harper Roberts</span
+                    >
+                  </a>
+                  <a
+                    class="flex items-center gap-3 group hover:bg-black/5 dark:hover:bg-white/5 p-2 rounded-lg transition-colors"
+                    href="#"
+                  >
+                    <img
+                      alt="Christopher Turner"
+                      class="size-10 rounded-full"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCg9H7duxQkDY08F4XISDDqmGMzVKjLV2fdWtj3Px0THoTYG7cYtLSqkzcuL85oj4je88Hg4-9Hh3ZpJfpJ_vHwqRVSh7jNYZMca6IoVN_SxWRtYTQuklbGDxMSgxUl-dI3Cdf9AywCgB1QxB6eOkF-YFDxw27IFqyxrSJdgn2Yo9Rgkf_RfHcboAGL3PUB2LinGNRuB0q25CYlIpF6vorwtQStjCSaH63M5NXuYDCuSRsTm77pssBQhjWcDtgZr77EvoPjHTKodRk"
+                    />
+                    <span
+                      class="font-medium group-hover:text-primary transition-colors"
+                      >Christopher Turner</span
+                    >
+                  </a>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
