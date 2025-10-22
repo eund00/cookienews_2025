@@ -1,6 +1,6 @@
 # 쿠키뉴스 2025 개편 시안 🍪 
 
-[![image](https://kuk.kod.es/data/kuk/upload/save/company/kuk17189345464229.png)
+![image](https://kuk.kod.es/data/kuk/upload/save/company/kuk17189345464229.png)
 
 **2025년 쿠키뉴스 홈페이지 개편 관련 시안입니다.**
 
